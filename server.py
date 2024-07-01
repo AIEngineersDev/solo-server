@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Request, Response
 import httpx
+from starlette.responses import StreamingResponse
 
 app = FastAPI()
 
@@ -21,6 +22,28 @@ async def stream_to_llama_cpp(request: Request):
             status_code=llama_response.status_code,
             headers=llama_response.headers
         )
+    
+@app.post("/completion")
+async def completion(request: Request):
+    client_request_data = await request.body()
+    print("something happen")
+    async def event_generator():
+        try:
+            async with httpx.AsyncClient() as client:
+                async with client.stream("POST", f"{llama_cpp_url}/completion", content=client_request_data) as response:
+                    async for line in response.aiter_lines():
+                        if await request.is_disconnected():
+                            break
+                        yield line + "\n"
+        except Exception as e:
+            print(f"Error in event_generator: {e}")
+
+    # Create a StreamingResponse with headers from the external API response
+    async with httpx.AsyncClient() as client:
+        async with client.stream("POST", "http://localhost:8080/completion", content=b"test") as response:
+            headers = {key: value for key, value in response.headers.items() if key.lower() != "content-length"}
+
+    return StreamingResponse(event_generator(), media_type="text/event-stream", headers=headers)
 
 if __name__ == "__main__":
     import uvicorn
