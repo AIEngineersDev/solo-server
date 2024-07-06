@@ -1,34 +1,43 @@
-from fastapi import FastAPI, Request, Response
+import os
 import httpx
+import logging
+import pickle
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
 from starlette.responses import StreamingResponse
 from llama_index.core import Settings
-from llama_index.embeddings.llamafile import LlamafileEmbedding
 from llama_index.llms.llamafile import Llamafile
 from llama_index.core.node_parser import SentenceSplitter
-from llama_index.core import SimpleDirectoryReader, VectorStoreIndex
+from llama_index.embeddings.llamafile import LlamafileEmbedding
 from llama_index.readers.web import SimpleWebPageReader
+from llama_index.core import SimpleDirectoryReader, VectorStoreIndex, StorageContext, load_index_from_storage
+
+logging.basicConfig(filename='server.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
 
 app = FastAPI()
 
-llama_cpp_url = "http://localhost:8080"
+origins = ["*"]  # Adjust as needed for CORS policy
+app.add_middleware(CORSMiddleware, allow_origins=origins, allow_credentials=True, allow_methods=["GET", "POST"], allow_headers=["*"])
 
-# Based on https://www.llamaindex.ai/blog/using-llamaindex-and-llamafile-to-build-a-local-private-research-assistant
-# Configure LlamaIndex
 
-def load_local_data(input_dir='./data'):
-    local_doc_reader = SimpleDirectoryReader(input_dir=input_dir)
-    return local_doc_reader.load_data(show_progress=True)
+index = None
+stored_docs = {}
+
+index_name = "./saved_index"
+pkl_name = "stored_documents.pkl"
+llama_cpp_url = 'http://localhost:8080'
+
 
 def load_web_data(urls):
     web_reader = SimpleWebPageReader(html_to_text=True)
     return web_reader.load_data(urls)
 
-def build_index(docs, persist_dir="./storage"):
-    index = VectorStoreIndex.from_documents(docs, show_progress=True)
-    index.storage_context.persist(persist_dir=persist_dir)
-    return index
+def initialize_index():
+    """Create a new global index, or load one from the pre-set path."""
+    global index, stored_docs
+    print('initialize_index()')
 
-def configure_llama_index():
     Settings.embed_model = LlamafileEmbedding(base_url=llama_cpp_url)
     Settings.llm = Llamafile(
         base_url=llama_cpp_url,
@@ -42,30 +51,24 @@ def configure_llama_index():
         )
     ]
 
-def query_rag(index, question):
-    query_engine = index.as_query_engine()
-    response = query_engine.query(question)
-    return response
+    if os.path.exists(index_name):
+        index = load_index_from_storage(StorageContext.from_defaults(persist_dir=index_name), Settings=Settings)
+    else:
+        local_doc_reader = SimpleDirectoryReader(input_dir='./data')
+        local_docs = local_doc_reader.load_data(show_progress=True)
+        web_docs = load_web_data([
+            'https://en.wikipedia.org/wiki/Homing_pigeon',
+            # 'https://en.wikipedia.org/wiki/Magnetoreception'
+        ])
+        all_docs = local_docs + web_docs
+        index = VectorStoreIndex.from_documents(all_docs, show_progress=True, Settings=Settings)
+        index.storage_context.persist(persist_dir=index_name)
+    if os.path.exists(pkl_name):
+        with open(pkl_name, "rb") as f:
+            stored_docs = pickle.load(f)
+    return index
 
-# TODO: add mongo store: https://docs.llamaindex.ai/en/stable/examples/vector_stores/MongoDBAtlasVectorSearch/
 
-@app.post("/stream")
-async def stream_to_llama_cpp(request: Request):
-    async with httpx.AsyncClient() as client:
-        # Forward the request body and headers to the llama.cpp server
-        llama_response = await client.post(
-            llama_cpp_url,
-            content=await request.body(),
-            headers=request.headers
-        )
-
-        # Stream the response from llama.cpp server back to the client
-        return Response(
-            content=llama_response.content,
-            status_code=llama_response.status_code,
-            headers=llama_response.headers
-        )
-    
 @app.post("/completion")
 async def completion(request: Request):
     client_request_data = await request.body()
@@ -82,22 +85,37 @@ async def completion(request: Request):
 
     # Create a StreamingResponse with headers from the external API response
     async with httpx.AsyncClient() as client:
-        async with client.stream("POST", "http://localhost:8080/completion", content=b"test") as response:
+        async with client.stream("POST", f"{llama_cpp_url}/completion", content=b"test") as response:
             headers = {key: value for key, value in response.headers.items() if key.lower() != "content-length"}
 
     return StreamingResponse(event_generator(), media_type="text/event-stream", headers=headers)
 
+
+@app.get("/query")
+async def query_index(request: Request):
+    global index
+
+    query_engine = index.as_query_engine(streaming=True, similarity_top_k=1)
+    try:
+        async def event_generator(text = request.query_params.get('text')):
+            try:
+                response_stream = query_engine.query(text)
+
+                for line in response_stream.response_gen:
+                    if await request.is_disconnected():
+                        break
+                    yield line
+            except Exception as e:
+                print(f"Error in event_generator: {e}")
+
+        return StreamingResponse(event_generator(), media_type="text/event-stream")
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error querying index: {str(e)}")
+
+
+initialize_index()
+
 if __name__ == "__main__":
-    import uvicorn
-    # Load data and build index
-    local_docs = load_local_data()
-    web_docs = load_web_data([
-        'https://en.wikipedia.org/wiki/Homing_pigeon',
-        'https://en.wikipedia.org/wiki/Magnetoreception'
-    ])
-    all_docs = local_docs + web_docs
-    build_index(all_docs)
-    
-    # Configure LlamaIndex
-    configure_llama_index()
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    # init the global index
+    print("server started...")
