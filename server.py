@@ -53,16 +53,16 @@ def initialize_index():
 
     if os.path.exists(index_name):
         index = load_index_from_storage(StorageContext.from_defaults(persist_dir=index_name), Settings=Settings)
-    else:
-        local_doc_reader = SimpleDirectoryReader(input_dir='./data')
-        local_docs = local_doc_reader.load_data(show_progress=True)
-        web_docs = load_web_data([
-            'https://en.wikipedia.org/wiki/Homing_pigeon',
-            # 'https://en.wikipedia.org/wiki/Magnetoreception'
-        ])
-        all_docs = local_docs + web_docs
-        index = VectorStoreIndex.from_documents(all_docs, show_progress=True, Settings=Settings)
-        index.storage_context.persist(persist_dir=index_name)
+    # else:
+    #     local_doc_reader = SimpleDirectoryReader(input_dir='./data')
+    #     local_docs = local_doc_reader.load_data(show_progress=True)
+    #     web_docs = load_web_data([
+    #         'https://en.wikipedia.org/wiki/Homing_pigeon',
+    #         # 'https://en.wikipedia.org/wiki/Magnetoreception'
+    #     ])
+    #     all_docs = local_docs + web_docs
+    #     index = VectorStoreIndex.from_documents(all_docs, show_progress=True, Settings=Settings)
+    #     index.storage_context.persist(persist_dir=index_name)
     if os.path.exists(pkl_name):
         with open(pkl_name, "rb") as f:
             stored_docs = pickle.load(f)
@@ -72,6 +72,7 @@ def initialize_index():
 @app.post("/completion")
 async def completion(request: Request):
     client_request_data = await request.body()
+    print(client_request_data)
     async def event_generator():
         try:
             async with httpx.AsyncClient() as client:
