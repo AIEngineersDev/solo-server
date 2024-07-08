@@ -72,7 +72,7 @@ def initialize_index():
 @app.post("/completion")
 async def completion(request: Request):
     client_request_data = await request.body()
-    print(client_request_data)
+    logging.info('/completion', client_request_data)
     async def event_generator():
         try:
             async with httpx.AsyncClient() as client:
