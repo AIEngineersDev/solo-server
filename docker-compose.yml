@@ -18,6 +18,8 @@ services:
       timeout: 5s
       retries: 5
       start_interval: 5s
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   mongo_db:
     container_name: mongodb
