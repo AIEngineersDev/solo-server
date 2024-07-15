@@ -1,0 +1,63 @@
+version: '3.7'
+
+services:
+  solo-server:
+    container_name: solo-server
+    image: solo-server
+    ports:
+      - '8000:8000'
+    networks:
+      - my-network
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          "curl -s -f http://localhost:8000/docs | grep 'Swagger UI'",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_interval: 5s
+
+  mongo_db:
+    container_name: mongodb
+    image: mongo
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo_db:/data/db
+    networks:
+      - my-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  solo-chat-ui:
+    container_name: solo-chat-ui
+    image: solo-chat-ui
+    ports:
+      - '5173:5173'
+    depends_on:
+      mongo_db:
+        condition: service_healthy
+      solo-server:
+        condition: service_started
+    environment:
+      MONGODB_URL: mongodb://mongo_db:27017
+    networks:
+      - my-network
+    command: bash -c "npm run dev"
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:5173/']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+networks:
+  my-network:
+    driver: bridge
+
+volumes:
+  mongo_db: {}
