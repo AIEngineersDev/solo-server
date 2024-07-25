@@ -26,7 +26,7 @@ stored_docs = {}
 
 index_name = "./saved_index"
 pkl_name = "stored_documents.pkl"
-llama_cpp_url = 'http://localhost:8080'
+llama_cpp_url = 'http://llmaserver:8080'
 
 
 def load_web_data(urls):
