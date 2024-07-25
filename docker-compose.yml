@@ -7,7 +7,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - /Users/itsbhatt/Library/Application Support/solo/solo/tinyllama-1.1b-chat-v1.0.Q8_0.gguf:/model
+      - ../tinyllama-1.1b-chat-v1.0.Q8_0.gguf:/model
     stdin_open: true  # Equivalent to `-it`
     tty: true  # Equivalent to `-it`
     networks:
