@@ -1,6 +1,23 @@
 version: '3.7'
 
 services:
+  llmaserver:
+    container_name: llmaserver
+    image: iverly/llamafile-docker:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - /Users/itsbhatt/Library/Application Support/solo/solo/tinyllama-1.1b-chat-v1.0.Q8_0.gguf:/model
+    stdin_open: true  # Equivalent to `-it`
+    tty: true  # Equivalent to `-it`
+    networks:
+      - my-network
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:8080/']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   solo-server:
     container_name: solo-server
     image: solo-server
