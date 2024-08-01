@@ -1,15 +1,26 @@
 version: '3.7'
 
 services:
-  llmaserver:
-    container_name: llmaserver
-    image: iverly/llamafile-docker:latest
+  traefik:
+    image: traefik:v2.5
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
     ports:
+      - "80:80"
       - "8080:8080"
+    networks:
+      - my-network
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+  llmaserver:
+    image: iverly/llamafile-docker:latest
     volumes:
       - ../tinyllama-1.1b-chat-v1.0.Q8_0.gguf:/model
-    stdin_open: true  # Equivalent to `-it`
-    tty: true  # Equivalent to `-it`
+    stdin_open: true
+    tty: true
     networks:
       - my-network
     healthcheck:
@@ -17,6 +28,16 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: '10.0'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.llmaserver.rule=PathPrefix(`/`)"
+      - "traefik.http.services.llmaserver.loadbalancer.server.port=8080"
+    restart: always  # Restart llamaserver if it stops
 
   solo-server:
     container_name: solo-server
@@ -37,6 +58,7 @@ services:
       start_interval: 5s
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    restart: always  # Restart solo-server if it stops
 
   mongo_db:
     container_name: mongodb
@@ -52,6 +74,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    restart: always  # Restart mongodb if it stops
 
   solo-chat-ui:
     container_name: solo-chat-ui
@@ -73,6 +96,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+    restart: always  # Restart solo-chat-ui if it stops
 
 networks:
   my-network:
