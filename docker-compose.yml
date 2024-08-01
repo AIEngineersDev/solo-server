@@ -16,6 +16,7 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock"
 
   llmaserver:
+    container_name: solo-server
     image: iverly/llamafile-docker:latest
     volumes:
       - ../tinyllama-1.1b-chat-v1.0.Q8_0.gguf:/model
@@ -29,7 +30,6 @@ services:
       timeout: 5s
       retries: 5
     deploy:
-      replicas: 2
       resources:
         limits:
           cpus: '10.0'
