@@ -38,9 +38,8 @@ GPT4 Correct Assistant:
 """
 rag_pipeline = Pipeline()
 text_embedder = SentenceTransformersTextEmbedder(model="sentence-transformers/all-MiniLM-L6-v2")
-model_path = "/Users/itsbhatt/Downloads/tinyllama-1.1b-chat-v1.0.Q8_0.gguf"
-generator = LlamaCppGenerator(model=model_path, n_ctx=4096, n_batch=128, generation_kwargs={})
-generator.warm_up()
+model_path = "/Users/dhruvdiddi/Downloads/qwen2-0_5b-instruct-q5_0.gguf"
+generator = LlamaCppGenerator(model=model_path, n_ctx=4096, n_batch=128)
 
 rag_pipeline.add_component(instance=text_embedder, name="text_embedder")
 rag_pipeline.add_component(instance=InMemoryEmbeddingRetriever(document_store=doc_store, top_k=3), name="retriever")
