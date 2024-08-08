@@ -82,4 +82,4 @@ def ask_question():
     return Response(generate_response(), content_type='application/json')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5010)
