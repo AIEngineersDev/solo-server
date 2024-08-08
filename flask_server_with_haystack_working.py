@@ -38,8 +38,9 @@ GPT4 Correct Assistant:
 """
 rag_pipeline = Pipeline()
 text_embedder = SentenceTransformersTextEmbedder(model="sentence-transformers/all-MiniLM-L6-v2")
-model_path = "/Users/dhruvdiddi/Downloads/qwen2-0_5b-instruct-q5_0.gguf"
-generator = LlamaCppGenerator(model=model_path, n_ctx=4096, n_batch=128)
+model_path = "/Users/itsbhatt/Downloads/tinyllama-1.1b-chat-v1.0.Q8_0.gguf"
+generator = LlamaCppGenerator(model=model_path, n_ctx=4096, n_batch=128, generation_kwargs={})
+generator.warm_up()
 
 rag_pipeline.add_component(instance=text_embedder, name="text_embedder")
 rag_pipeline.add_component(instance=InMemoryEmbeddingRetriever(document_store=doc_store, top_k=3), name="retriever")
@@ -58,11 +59,12 @@ def ask_question():
     data = request.json
     print(data)
     question = data.get('messages')
-    question = json.dumps(question, indent=4)
+    question = question[len(question)-1]
+    question = question.get('content')
+    print(question)
     if not question:
         return Response("No question provided", status=400)
 
-    
     def generate_response():
         result = rag_pipeline.run(
             {
@@ -76,7 +78,7 @@ def ask_question():
         if not answers:
             yield json.dumps({"error": "No answer found"})
         else:
-            yield json.dumps({"answer": answers[0].data})
+            yield answers[0].data
 
     return Response(generate_response(), content_type='application/json')
 
