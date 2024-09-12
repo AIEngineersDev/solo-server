@@ -1,0 +1,9 @@
+FROM registry.access.redhat.com/ubi9/python-311:1-72.1722518949
+WORKDIR /locallm
+COPY src .
+USER root
+RUN dnf install -y gcc-toolset-13-gcc gcc-toolset-13-gcc-c++
+USER 1001
+RUN CC="/opt/rh/gcc-toolset-13/root/usr/bin/gcc" CXX="/opt/rh/gcc-toolset-13/root/usr/bin/g++"  pip install --no-cache-dir --verbose -r ./requirements.txt
+EXPOSE 8001
+ENTRYPOINT [ "sh", "./run.sh" ]
