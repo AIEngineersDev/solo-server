@@ -1,57 +1,200 @@
-# Solo Server: On-Device Multi-Model AI Deployment
+# Solo Server
 
-Solo Server is a powerful backend solution for deploying multiple AI models on-device, leveraging the efficiency of llamafile and the versatility of GGUF (GPT-Generated Unified Format). It offers a secure, flexible, and high-performance platform for organizations seeking to harness AI capabilities while maintaining full control over their data and models.
+[![PyPI version](https://badge.fury.io/py/solo-server.svg)](https://badge.fury.io/py/solo-server)
 
-## Key Features
+**Solo Server** is a command-line tool that simplifies the creation and management of AI model servers for various modalities such as text, images, audio, and video. It provides easy-to-use templates and an interactive setup to help you quickly start projects and deploy AI models without hassle.
 
-- 🚀 Multi-Model Deployment: Deploy and manage multiple AI models on a single device or server.
-- 📦 Llamafile Integration: Utilize the efficiency and portability of llamafile for streamlined model deployment.
-- 🔄 GGUF Support: Leverage the GPT-Generated Unified Format for enhanced model compatibility and performance.
-- 🔒 On-Device Processing: Ensure data privacy and security with fully local AI computations.
-- ⚡ High Performance: Optimized for speed and efficiency on local hardware.
-- 🔌 API-First Design: Easy integration with existing systems and applications.
-- 🎛️ Flexible Configuration: Customize deployments to suit specific organizational needs.
+## Features
 
-## Use Cases
+- **Quick Project Initialization**: Start new AI server projects rapidly with built-in templates.
+- **Multi-Modality Support**: Templates available for text (LLM), computer vision, audio processing, video processing, tabular data, and more.
+- **Interactive CLI**: User-friendly prompts guide you through project setup.
+- **Optional Components**: Install only the components you need using pip extras (e.g., `[llm]`, `[cv]`, `[all]`).
+- **Simple Server Management**: Easily start, stop, and manage your server with straightforward commands.
+- **Extensible Templates**: Customize existing templates or add new ones to suit your specific needs.
+- **Deployment Ready**: Package your application into Docker containers for easy deployment.
 
-- Enterprise AI Integration
-- Edge Computing
-- Privacy-Critical Applications (Healthcare, Finance, Government)
-- AI Research and Development
-- High-Performance Computing
+## Installation
+
+Solo Server requires Python 3.7 or higher.
+
+### Install Core Package
+
+```bash
+pip install solo-server
+```
+
+### Install with Optional Components
+
+If you need support for specific AI modalities, install the corresponding extras:
+
+- **Language Models (LLM)**:
+
+  ```bash
+  pip install solo-server[llm]
+  ```
+
+- **Computer Vision (CV)**:
+
+  ```bash
+  pip install solo-server[cv]
+  ```
+
+- **Audio Processing**:
+
+  ```bash
+  pip install solo-server[audio]
+  ```
+
+- **All Components**:
+
+  ```bash
+  pip install solo-server[all]
+  ```
 
 ## Getting Started
 
-1. Download the appropriate package for your operating system (Linux, macOS, or Windows).
-2. Extract the contents to your desired location.
-3. Configure your environment variables and settings.
-4. Start the Solo Server using the provided startup script.
-5. Begin deploying your AI models using our API.
+### Initialize a New Project
 
-## Model Deployment
+Run the `init` command to start a new project. This will guide you through an interactive setup.
 
-Solo Server supports a wide range of GGUF-compatible models. To deploy a model:
+```bash
+solo-server init
+```
 
-1. Place your GGUF model file in the designated `models` directory.
-2. Update the server configuration to recognize the new model.
-3. Restart the server or use the hot-reload feature to apply changes.
+**Example Interaction:**
 
-## Performance Optimization
+```bash
+Welcome to Solo Server Project Initialization!
+----------------------------------------------
+Enter your project name [my_project]: my_ai_project
+Choose a project template [basic]: llm
+Project 'my_ai_project' initialized successfully!
+```
 
-- Utilize GPU acceleration where available.
-- Adjust model quantization settings for the optimal balance of speed and accuracy.
-- Fine-tune server parameters based on your hardware specifications.
+### Navigate to Your Project
 
-## Security
+```bash
+cd my_ai_project
+```
 
-- End-to-end encryption for all API communications.
-- Robust authentication and authorization mechanisms.
-- Regular security updates and patches.
+### Install Project Dependencies
 
-## Support
+```bash
+pip install -r requirements.txt
+```
 
-For additional information, troubleshooting, and best practices, please consult our documentation. If you need further assistance, contact our support team via email or our support portal.
+### Run the Server
+
+```bash
+solo-server start
+```
+
+Your server should now be running at `http://localhost:8000`.
+
+## Templates
+
+Solo Server provides several templates to kickstart your project:
+
+- **basic**: A minimal project setup.
+- **llm**: Language models and text processing.
+- **cv**: Computer vision projects.
+- **audio**: Audio analysis and speech recognition.
+- **multimodal**: Combining multiple data types (e.g., text and images).
+- **tabular**: Data analysis on tabular datasets.
+- **video**: Video processing and analysis.
+- **compound**: Complex projects involving multiple AI components.
+
+## Core Commands
+
+- **`solo-server init`**: Initialize a new project with an interactive setup.
+- **`solo-server start`**: Start the server for the current project.
+- **`solo-server stop`**: Stop the running server.
+- **`solo-server restart`**: Restart the server.
+- **`solo-server status`**: Check the status of the server.
+- **`solo-server install`**: Install project dependencies.
+- **`solo-server config`**: Manage project configuration.
+  - `solo-server config init`: Generate a default configuration file.
+  - `solo-server config show`: Display the current configuration.
+  - `solo-server config set <parameter> <value>`: Set a configuration parameter.
+- **`solo-server generate`**: Generate code snippets or files based on templates.
+  - `solo-server generate <type> <name>`: Generate a new component (e.g., `endpoint`, `model`).
+- **`solo-server help`**: Display help information about commands.
+
+## Examples
+
+### Example: Creating a Language Model Server
+
+1. **Initialize the Project**
+
+   ```bash
+   solo-server init
+   ```
+
+   Select the `llm` template.
+
+2. **Install Dependencies**
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Run the Server**
+
+   ```bash
+   solo-server start
+   ```
+
+4. **Test the Endpoint**
+
+   Send a POST request to the server:
+
+   ```bash
+   curl -X POST -H "Content-Type: application/json" \
+        -d '{"prompt": "Hello, world!"}' \
+        http://localhost:8000
+   ```
+
+### Example: Packaging Your Application into a Docker Container
+
+1. **Create a Dockerfile**
+
+   ```dockerfile
+   # Dockerfile
+
+   FROM python:3.9-slim
+
+   WORKDIR /app
+
+   COPY requirements.txt .
+
+   RUN pip install --no-cache-dir -r requirements.txt
+
+   COPY . .
+
+   EXPOSE 8000
+
+   CMD ["solo-server", "start"]
+   ```
+
+2. **Build the Docker Image**
+
+   ```bash
+   docker build -t my-ai-server .
+   ```
+
+3. **Run the Docker Container**
+
+   ```bash
+   docker run -p 8000:8000 my-ai-server
+   ```
+
+## Contributing
+
+Contributions are welcome! Please read the [contributing guidelines](CONTRIBUTING.md) before submitting a pull request.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
-
-Solo Server: Empowering organizations with secure, flexible, and high-performance on-device AI deployment.
