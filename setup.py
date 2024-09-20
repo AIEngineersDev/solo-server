@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="solo-server",
-    version="0.1.0",
+    version="0.1.1",
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
@@ -10,11 +10,12 @@ setup(
         "GPUtil",
         "psutil",
         "tqdm",
-        "requests"
+        "requests",
+        "argparse"  # Added this as it's used in cli.py
     ],
     entry_points={
         "console_scripts": [
-            "solo-server = solo_server.main:app",
+            "solo-server = solo_server.cli:main",  # Updated this line
         ],
     },
     author="Dhruv Diddi",
