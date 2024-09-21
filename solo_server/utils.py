@@ -10,9 +10,16 @@ def get_templates_dir():
         try:
             os.makedirs(templates_dir)
             print(f"Created templates directory at {templates_dir}", file=sys.stderr)
+            # Check if we have write permission
+            if not os.access(templates_dir, os.W_OK):
+                print(f"Warning: No write permission for {templates_dir}", file=sys.stderr)
+                return None
         except OSError as e:
             print(f"Error creating templates directory: {e}", file=sys.stderr)
             return None
+    elif not os.access(templates_dir, os.R_OK | os.W_OK):
+        print(f"Error: No read/write permission for {templates_dir}", file=sys.stderr)
+        return None
     return templates_dir
 
 def get_available_templates(templates_dir):
