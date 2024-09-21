@@ -1,5 +1,9 @@
 import litserve as ls
 from transformers import pipeline
+import logging
+from fastapi import Request
+
+logging.basicConfig(level=logging.INFO)
 
 class HuggingFaceLitAPI(ls.LitAPI):
     def setup(self, device):
@@ -23,9 +27,33 @@ class HuggingFaceLitAPI(ls.LitAPI):
         # This example sends back the label and score of the prediction
         return {"label": output[0]["label"], "score": output[0]["score"]}
 
+class CustomLitServer(ls.LitServer):
+    async def predict(self, request: Request):
+        content_type = request.headers.get("Content-Type", "")
+        
+        if content_type == "application/x-www-form-urlencoded":
+            form_data = await request.form()
+            data = dict(form_data)
+        elif content_type == "application/json":
+            data = await request.json()
+        else:
+            try:
+                data = await request.json()
+            except:
+                try:
+                    form_data = await request.form()
+                    data = dict(form_data)
+                except:
+                    raise ValueError("Unable to parse request data. Please specify a valid Content-Type.")
+
+        return await self.api.predict(data)
+
 if __name__ == "__main__":
-    # Create an instance of your API
-    api = HuggingFaceLitAPI()
-    # Start the server, specifying the port
-    server = ls.LitServer(api, accelerator="cuda")
-    server.run(port=8000)
+    try:
+        # Create an instance of your API
+        api = HuggingFaceLitAPI()
+        # Start the server, specifying the port
+        server = CustomLitServer(api, accelerator="cuda")
+        server.run(port=8000)
+    except Exception as e:
+        logging.error(f"An error occurred: {e}")
