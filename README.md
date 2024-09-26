@@ -16,9 +16,9 @@ Solo Server is a flexible and privacy-first server framework designed for hostin
 ## Features
 
 - **Seamless Setup:** Manage your server, initialize projects, install dependencies, and configure settings with CLI.
-- **Ready-to-Use Templates:** Instantly launch AI projects with pre-built templates for language models, computer vision, audio, tabular data, and more.
+- **Ready-to-Use Templates:** Pre-built for language models, computer vision, audio, tabular data, and more.
 - **Cross-Platform Compatibility:** Effortlessly deploy across any platform, handling a wide range of AI workloads.
-- **Extensible Framework:** Easily expand to support new AI modalities or integrate custom models.
+- **Extensible Framework:** Easily expand to support new AI models and workflows.
 
 ## Quickstart
 
@@ -38,39 +38,45 @@ Run the `init` command to start a new project. This will guide you through an in
 solo-server init
 ```
 
-**Example Interaction:**
+
+<details>
+  <summary>Example Interaction</summary>
 
 ```bash
 Welcome to Solo Server Project Initialization!
 ----------------------------------------------
-Enter your project name [my_project]: my_ai_project
+Enter your project name [my_project]: solo_project
 Choose a project template [basic]: llm
-Project 'my_ai_project' initialized successfully!
+Project 'solo_project' initialized successfully!
 ```
+</details>
+
+
+
 
 3. Navigate to Your Project, Install Dependencies, and Run the Server
 
-<!-- ```bash
-cd my_ai_project
-```
-
-```bash
-pip install -r requirements.txt
-``` -->
 
 ```bash
 solo-server start
 ```
 
-Your server should now be running at `http://localhost:8000`.
+
+Your server should now be running at `http://localhost:5070`.
+
+<details>
+  <summary>Test the Server</summary>
 
 Send a POST request to the server or use client.py to test:
 
    ```bash
    curl -X POST -H "Content-Type: application/json" \
         -d '{"prompt": "Hello, world!"}' \
-        http://localhost:8000
+        http://localhost:5070
    ```
+</details>
+
+
 ## Templates
 
 Solo Server provides several templates to kickstart your project:
@@ -86,7 +92,8 @@ Solo Server provides several templates to kickstart your project:
 
 ## Use Cases
 
-### Dockerizing a Solo Server Project for Production
+<details>
+  <summary> Dockerizing Solo Server</summary>
 
 1. **Create a Dockerfile**
 
@@ -117,12 +124,31 @@ Solo Server provides several templates to kickstart your project:
 3. **Run the Docker Container**
 
    ```bash
-   docker run -p 8000:8000 my-ai-server
+   docker run -p 5070:5070 my-ai-server
    ```
-### NotebookLM (Langauge Model + RAG + Search)
-### Roadio (Langauge Model + Audio)
-### PII Router (Local Langauge Model + Cloud Language Model)
-### Personalized Greeter (Langauge Model + Tools + Audio)
+</details>
+
+
+<details>
+  <summary> NotebookLM (Langauge Model + RAG + Tools)</summary>
+  Coming Soon
+</details>
+
+<details>
+  <summary> Roadio (Vision + Langauge Model + Audio)</summary>
+  Coming Soon
+</details>
+
+<details>
+  <summary> PII Router (Local Langauge Model + Cloud Language Model)</summary>
+  Coming Soon
+</details>
+
+<details>
+  <summary> Llama FS (Langauge Model + Tools)</summary>
+   Coming Soon
+</details>
+
 
 
 ## Docs
