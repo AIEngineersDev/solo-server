@@ -1,60 +1,36 @@
-# Solo Server
+<div align='center'>
 
-[![PyPI version](https://badge.fury.io/py/solo-server.svg)](https://badge.fury.io/py/solo-server)
+# Simple server for compound AI    
 
-**Solo Server** is a command-line tool that simplifies the creation and management of AI model servers for various modalities such as text, images, audio, and video. It provides easy-to-use templates and an interactive setup to help you quickly start projects and deploy AI models without hassle.
+<img alt="Lightning" src="assets/SoloServerBanner.png" width="800px" style="max-width: 100%;">
+
+&nbsp;
+
+Simple. Private. Effective.    
+</div>
+
+----
+
+Solo Server is a flexible and privacy-first server framework designed for hosting AI models locally and securely. Built with on-device model deployment in mind, Solo Server allows you to set up, manage, and serve AI-powered endpoints with ease, whether you're working with language models, computer vision, audio processing, or multimodal applications.
 
 ## Features
 
-- **Quick Project Initialization**: Start new AI server projects rapidly with built-in templates.
-- **Multi-Modality Support**: Templates available for text (LLM), computer vision, audio processing, video processing, tabular data, and more.
-- **Interactive CLI**: User-friendly prompts guide you through project setup.
-- **Optional Components**: Install only the components you need using pip extras (e.g., `[llm]`, `[cv]`, `[all]`).
-- **Simple Server Management**: Easily start, stop, and manage your server with straightforward commands.
-- **Extensible Templates**: Customize existing templates or add new ones to suit your specific needs.
-- **Deployment Ready**: Package your application into Docker containers for easy deployment.
+- **Seamless Setup:** Manage your server, initialize projects, install dependencies, and configure settings with CLI.
+- **Ready-to-Use Templates:** Instantly launch AI projects with pre-built templates for language models, computer vision, audio, tabular data, and more.
+- **Cross-Platform Compatibility:** Effortlessly deploy across any platform, handling a wide range of AI workloads.
+- **Extensible Framework:** Easily expand to support new AI modalities or integrate custom models.
 
-## Installation
+## Quickstart
 
-Solo Server requires Python 3.7 or higher.
+Requires Python 3.7 or higher.
 
-### Install Core Package
+1. Install Core Package
 
 ```bash
 pip install solo-server
 ```
 
-### Install with Optional Components
-
-If you need support for specific AI modalities, install the corresponding extras:
-
-- **Language Models (LLM)**:
-
-  ```bash
-  pip install solo-server[llm]
-  ```
-
-- **Computer Vision (CV)**:
-
-  ```bash
-  pip install solo-server[cv]
-  ```
-
-- **Audio Processing**:
-
-  ```bash
-  pip install solo-server[audio]
-  ```
-
-- **All Components**:
-
-  ```bash
-  pip install solo-server[all]
-  ```
-
-## Getting Started
-
-### Initialize a New Project
+2. Initialize a New Project
 
 Run the `init` command to start a new project. This will guide you through an interactive setup.
 
@@ -72,19 +48,15 @@ Choose a project template [basic]: llm
 Project 'my_ai_project' initialized successfully!
 ```
 
-### Navigate to Your Project
+3. Navigate to Your Project, Install Dependencies, and Run the Server
 
-```bash
+<!-- ```bash
 cd my_ai_project
 ```
 
-### Install Project Dependencies
-
 ```bash
 pip install -r requirements.txt
-```
-
-### Run the Server
+``` -->
 
 ```bash
 solo-server start
@@ -92,70 +64,29 @@ solo-server start
 
 Your server should now be running at `http://localhost:8000`.
 
-## Templates
-
-Solo Server provides several templates to kickstart your project:
-
-- **basic**: A minimal project setup.
-- **llm**: Language models and text processing.
-- **cv**: Computer vision projects.
-- **audio**: Audio analysis and speech recognition.
-- **multimodal**: Combining multiple data types (e.g., text and images).
-- **tabular**: Data analysis on tabular datasets.
-- **video**: Video processing and analysis.
-- **compound**: Complex projects involving multiple AI components.
-
-## Core Commands
-
-- **`solo-server init`**: Initialize a new project with an interactive setup.
-- **`solo-server start`**: Start the server for the current project.
-- **`solo-server stop`**: Stop the running server.
-- **`solo-server restart`**: Restart the server.
-- **`solo-server status`**: Check the status of the server.
-- **`solo-server install`**: Install project dependencies.
-- **`solo-server config`**: Manage project configuration.
-  - `solo-server config init`: Generate a default configuration file.
-  - `solo-server config show`: Display the current configuration.
-  - `solo-server config set <parameter> <value>`: Set a configuration parameter.
-- **`solo-server generate`**: Generate code snippets or files based on templates.
-  - `solo-server generate <type> <name>`: Generate a new component (e.g., `endpoint`, `model`).
-- **`solo-server help`**: Display help information about commands.
-
-## Examples
-
-### Example: Creating a Language Model Server
-
-1. **Initialize the Project**
-
-   ```bash
-   solo-server init
-   ```
-
-   Select the `llm` template.
-
-2. **Install Dependencies**
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Run the Server**
-
-   ```bash
-   solo-server start
-   ```
-
-4. **Test the Endpoint**
-
-   Send a POST request to the server:
+Send a POST request to the server or use client.py to test:
 
    ```bash
    curl -X POST -H "Content-Type: application/json" \
         -d '{"prompt": "Hello, world!"}' \
         http://localhost:8000
    ```
+## Templates
 
-### Example: Packaging Your Application into a Docker Container
+Solo Server provides several templates to kickstart your project:
+
+- **basic**: A minimal project setup.
+- **llm**: Language models and text processing.
+- **vision**: Computer vision projects.
+- **audio**: Audio analysis and speech recognition.
+- **nlp**: Language analysis (e.g., NER and sentiment analysis).
+- **tabular**: Data analysis on tabular datasets.
+- **tools**: Tool calling for AI agents such as search, database and cmd execution.
+- **compound**: Complex projects involving multiple AI components.
+
+## Use Cases
+
+### Dockerizing a Solo Server Project for Production
 
 1. **Create a Dockerfile**
 
@@ -188,6 +119,28 @@ Solo Server provides several templates to kickstart your project:
    ```bash
    docker run -p 8000:8000 my-ai-server
    ```
+### NotebookLM (Langauge Model + RAG + Search)
+### Roadio (Langauge Model + Audio)
+### PII Router (Local Langauge Model + Cloud Language Model)
+### Personalized Greeter (Langauge Model + Tools + Audio)
+
+
+## Docs
+
+### Core Commands
+
+- **`solo-server init`**: Initialize a new project with an interactive setup.
+- **`solo-server start`**: Start the server for the current project.
+- **`solo-server stop`**: Stop the running server.
+- **`solo-server restart`**: Restart the server.
+- **`solo-server status`**: Check the status of the server.
+- **`solo-server install`**: Install project dependencies.
+- **`solo-server config`**: Manage project configuration.
+  - `solo-server config init`: Generate a default configuration file.
+  - `solo-server config show`: Display the current configuration.
+  - `solo-server config set <parameter> <value>`: Set a configuration parameter.
+- **`solo-server help`**: Display help information about commands.
+
 
 ## Contributing
 
