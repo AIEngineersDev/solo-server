@@ -15,9 +15,9 @@ Solo Server is a flexible and privacy-first server framework designed for hostin
 
 ## Features
 
-- **Seamless Setup:** Manage your server, initialize projects, install dependencies, and configure settings with CLI.
+- **Seamless Setup:** Manage your server and configure settings with CLI.
 - **Ready-to-Use Templates:** Pre-built for language models, computer vision, audio, tabular data, and more.
-- **Cross-Platform Compatibility:** Effortlessly deploy across any platform, handling a wide range of AI workloads.
+- **Cross-Platform Compatibility:** Effortlessly deploy across any platform.
 - **Extensible Framework:** Easily expand to support new AI models and workflows.
 
 ## Quickstart
