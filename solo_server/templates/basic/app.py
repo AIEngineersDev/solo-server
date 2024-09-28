@@ -1,12 +1,26 @@
-# templates/basic/app.py
+# server.py
+import litserve as ls
 
-from flask import Flask
+# STEP 1: DEFINE YOUR MODEL API
+class BasicLitAPI(ls.LitAPI):
+    def setup(self, device):
+        # setup is called once at startup. 
+        self.model = lambda x: x**3
 
-app = Flask(__name__)
+    def decode_request(self, request):
+        # Convert the request payload to model input.
+        return request["input"]
 
-@app.route('/')
-def home():
-    return 'Hello from Solo Server!'
+    def predict(self, x):
+        # Run inference and return the output.
+        return self.model(x)
 
-if __name__ == '__main__':
-    app.run()
+    def encode_response(self, output):
+        # Convert the model output to a response payload.
+        return {"output": output}
+
+# STEP 2: START THE SERVER
+if __name__ == "__main__":
+    api = BasicLitAPI()
+    server = ls.LitServer(api, accelerator="auto", max_batch_size=1)
+    server.run(port=50100)
