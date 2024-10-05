@@ -27,4 +27,8 @@ def get_available_templates(templates_dir):
         return []
     templates = [name for name in os.listdir(templates_dir)
                  if os.path.isdir(os.path.join(templates_dir, name))]
+    order = ['basic', 'llm', 'rag', 'nlp', 'vision', 'audio', 'tabular']
+    # Sort templates based on the defined order
+    templates.sort(key=lambda x: order.index(x) if x in order else len(order))
+    
     return templates
