@@ -9,15 +9,29 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="solo-server",
-    version="0.2.0",  # Incrementing the version for the new release
-    author="Your Name",
-    author_email="your.email@example.com",
-    description="A flexible server for various AI models and tools",
+    version="0.2.1",  # Incrementing the version for the new release
+    author="Dhruv Diddi",
+    author_email="dhruv.diddi@gmail.com",
+    description="A simple server for compound AI.",
     long_description=long_description,
-    long_description_content_type="text/markdown",
-    url="https://github.com/yourusername/solo-server",
+    long_description_content_type="text/markdown",  
+    url="https://github.com/AIEngineersDev/solo-server",
     packages=find_packages(),
     include_package_data=True,
+    package_data={
+        'solo_server': [
+            'templates/basic/*',
+            'templates/huggingface/*',
+            'templates/llm/*',
+            'templates/vision/*',
+            'templates/audio/*',
+            'templates/tools/*',
+            'templates/compound/*',
+            'templates/*/src/*',
+            'templates/*/tests/*',
+            'templates/*/client/*',
+        ],
+    },
     install_requires=[
         "litserve",
         "torch==2.3",
