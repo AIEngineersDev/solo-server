@@ -1,0 +1,11 @@
+build:
+  gpu: true
+  system_packages:
+    - "libgl1-mesa-glx"
+    - "libglib2.0-0"
+  python_version: "3.12"
+  python_packages:
+    - "litserve"
+    - "agents"
+    - "llama-cpp-python"
+predict: "src/predict.py:main"

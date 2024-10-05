@@ -1,3 +1,7 @@
+# Note: For local development, it's recommended to use `uv` for dependency management.
+# Install uv: curl -LsSf https://astral.sh/uv/install.sh | sh
+# Then use: uv venv && uv pip install -e .
+
 from setuptools import setup, find_packages
 
 with open("README.md", "r", encoding="utf-8") as fh:
@@ -6,12 +10,12 @@ with open("README.md", "r", encoding="utf-8") as fh:
 setup(
     name="solo-server",
     version="0.2.0",  # Incrementing the version for the new release
-    author="Dhruv Diddi",
-    author_email="dhruv.diddi@gmail.com",
-    description="A simple server for compound AI.",
+    author="Your Name",
+    author_email="your.email@example.com",
+    description="A flexible server for various AI models and tools",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/AIEngineersDev/solo-server",
+    url="https://github.com/yourusername/solo-server",
     packages=find_packages(),
     include_package_data=True,
     install_requires=[

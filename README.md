@@ -62,7 +62,7 @@ solo-server start
 ```
 
 
-Your server should now be running at `http://localhost:5070`.
+Your server should now be running at `http://localhost:5010`.
 
 <details>
   <summary>Test the Server</summary>
@@ -72,7 +72,7 @@ Send a POST request to the server or use client.py to test:
    ```bash
    curl -X POST -H "Content-Type: application/json" \
         -d '{"prompt": "Hello, world!"}' \
-        http://localhost:5070
+        http://localhost:5010
    ```
 </details>
 
@@ -124,7 +124,7 @@ Solo Server provides several templates to kickstart your project:
 3. **Run the Docker Container**
 
    ```bash
-   docker run -p 5070:5070 my-ai-server
+   docker run -p 5010:5010 my-ai-server
    ```
 </details>
 
@@ -155,17 +155,11 @@ Solo Server provides several templates to kickstart your project:
 
 ### Core Commands
 
-- **`solo-server init`**: Initialize a new project with an interactive setup.
+- **`solo-server init [template]`**: Initialize a new project with an optional template.
 - **`solo-server start`**: Start the server for the current project.
-- **`solo-server stop`**: Stop the running server.
-- **`solo-server restart`**: Restart the server.
-- **`solo-server status`**: Check the status of the server.
-- **`solo-server install`**: Install project dependencies.
-- **`solo-server config`**: Manage project configuration.
-  - `solo-server config init`: Generate a default configuration file.
-  - `solo-server config show`: Display the current configuration.
-  - `solo-server config set <parameter> <value>`: Set a configuration parameter.
-- **`solo-server help`**: Display help information about commands.
+- **`solo-server run`**: Run the server for the current project (alias for start).
+- **`solo-server list`**: List available project templates.
+- **`solo-server --help`**: Display help information about commands.
 
 
 ## Contributing
@@ -177,3 +171,28 @@ Contributions are welcome! Please read the [contributing guidelines](CONTRIBUTIN
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
+
+## Development
+
+For local development, we recommend using `uv` for dependency management:
+
+1. Install `uv`:
+   ```bash
+   curl -LsSf https://astral.sh/uv/install.sh | sh
+   ```
+
+2. Create a virtual environment and install dependencies:
+   ```bash
+   uv venv
+   uv pip install -e .
+   ```
+
+3. Activate the virtual environment:
+   ```bash
+   . .venv/bin/activate
+   ```
+
+4. Run the server:
+   ```bash
+   solo-server start
+   ```

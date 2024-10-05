@@ -1,0 +1,14 @@
+[project]
+name = "solo-server-audio"
+version = "0.1.0"
+description = "Audio template for Solo Server"
+dependencies = [
+    "litserve",
+    "torch==2.3",
+    "transformers",
+    "librosa",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

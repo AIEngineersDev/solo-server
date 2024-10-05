@@ -1,0 +1,13 @@
+[project]
+name = "solo-server-basic"
+version = "0.1.0"
+description = "Basic template for Solo Server"
+dependencies = [
+    "litserve",
+    "torch==2.3",
+    "transformers",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
