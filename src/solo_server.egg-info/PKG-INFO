@@ -1,0 +1,5 @@
+Metadata-Version: 2.1
+Name: solo-server
+Version: 0.1.0
+Summary: A library for running AI models as services
+Requires-Python: >=3.8
