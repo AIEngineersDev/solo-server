@@ -1,0 +1,15 @@
+litserve
+torch==2.3
+transformers
+pillow
+librosa
+agents
+llama-cpp-python
+streamlit
+requests
+typer
+
+[dev]
+pytest
+black
+isort
