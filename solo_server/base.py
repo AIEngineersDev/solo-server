@@ -1,5 +1,6 @@
 import typer
 from subprocess import run, CalledProcessError
+import os
 
 app = typer.Typer(help="🛠️ Solo Server CLI for managing edge AI model inference using Docker-style commands.")
 
@@ -42,13 +43,16 @@ def prompt():
             typer.echo("⚠️ Invalid choice. Please try again.")
 
 # Command to start the Solo Server, expects a tag name
+
 @app.command()
 def start(tag: str):
     """
     🚀 Start the Solo Server for model inference.
     """
     typer.echo(f"🚀 Starting the Solo Server with tag: {tag}...")
-    execute_command(["docker-compose", "-f", "docker-compose.yml", "up", "-d", "--build"])
+    python_file = f"templates/{tag}.py"
+    os.environ["PYTHON_FILE"] = python_file
+    execute_command(["docker-compose", "-f", "solo_server/docker-compose.yml", "up", "--build"])
 
 # Command to stop the Solo Server
 @app.command()
@@ -57,7 +61,7 @@ def stop():
     ⏹ Stop the running Solo Server.
     """
     typer.echo("⏹ Stopping the Solo Server...")
-    execute_command(["docker-compose", "-f", "docker-compose.yml", "down"])
+    execute_command(["docker-compose", "-f", "solo_server/docker-compose.yml", "down"])
 
 # Command to check the status of the Solo Server
 @app.command()
@@ -66,7 +70,7 @@ def status():
     📈 Check the status of the Solo Server.
     """
     typer.echo("📈 Checking Solo Server status...")
-    execute_command(["docker-compose", "-f", "docker-compose.yml", "ps"])
+    execute_command(["docker-compose", "-f", "solo_server/docker-compose.yml", "ps"])
 
 # Command to generate a code base template related to the tag
 @app.command()

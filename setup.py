@@ -62,7 +62,7 @@ setup(
     python_requires=">=3.8",
     entry_points={
         "console_scripts": [
-            "solo-server=solo_server.__main__:app",
+            "solo-server=solo_server.base:app",
         ],
     },
 )
