@@ -9,7 +9,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="solo-server",
-    version="0.2.3",  # Incrementing the version for the new release
+    version="0.2.4",  # Incrementing the version for the new release
     author="Dhruv Diddi",
     author_email="dhruv.diddi@gmail.com",
     description="A simple server for compound AI.",

@@ -52,7 +52,11 @@ def start(tag: str):
     typer.echo(f"🚀 Starting the Solo Server with tag: {tag}...")
     python_file = f"templates/{tag}.py"
     os.environ["PYTHON_FILE"] = python_file
-    execute_command(["docker-compose", "-f", "solo_server/docker-compose.yml", "up", "--build"])
+    
+    # Get the current file's directory and construct the full path
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    docker_compose_path = os.path.join(current_dir, "docker-compose.yml")
+    execute_command(["docker-compose", "-f", docker_compose_path, "up", "--build"])
 
 # Command to stop the Solo Server
 @app.command()
@@ -61,7 +65,9 @@ def stop():
     ⏹ Stop the running Solo Server.
     """
     typer.echo("⏹ Stopping the Solo Server...")
-    execute_command(["docker-compose", "-f", "solo_server/docker-compose.yml", "down"])
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    docker_compose_path = os.path.join(current_dir, "docker-compose.yml")
+    execute_command(["docker-compose", "-f", docker_compose_path, "down"])
 
 # Command to check the status of the Solo Server
 @app.command()
@@ -70,7 +76,9 @@ def status():
     📈 Check the status of the Solo Server.
     """
     typer.echo("📈 Checking Solo Server status...")
-    execute_command(["docker-compose", "-f", "solo_server/docker-compose.yml", "ps"])
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    docker_compose_path = os.path.join(current_dir, "docker-compose.yml")
+    execute_command(["docker-compose", "-f", docker_compose_path, "ps"])
 
 # Command to generate a code base template related to the tag
 @app.command()
