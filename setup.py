@@ -9,7 +9,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="solo-server",
-    version="0.2.4",  # Incrementing the version for the new release
+    version="0.2.5",  # Incrementing the version for the new release
     author="Dhruv Diddi",
     author_email="dhruv.diddi@gmail.com",
     description="A simple server for compound AI.",
@@ -20,28 +20,12 @@ setup(
     include_package_data=True,
     package_data={
         'solo_server': [
-            'templates/basic/*',
-            'templates/huggingface/*',
-            'templates/llm/*',
-            'templates/vision/*',
-            'templates/audio/*',
-            'templates/tools/*',
-            'templates/compound/*',
-            'templates/*/src/*',
-            'templates/*/tests/*',
-            'templates/*/client/*',
+            'solo-server/*'
+            'templates/*/*',
+            'templates/*/*/*',
         ],
     },
     install_requires=[
-        "litserve",
-        "torch==2.3",
-        "transformers",
-        "pillow",
-        "librosa",
-        "agents",
-        "llama-cpp-python",
-        "streamlit",
-        "requests",
         "typer",
     ],
     extras_require={
