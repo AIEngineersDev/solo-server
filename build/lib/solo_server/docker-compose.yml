@@ -1,0 +1,15 @@
+services:
+  solo-api:
+    build:
+      context: .
+      args:
+        PYTHON_FILE: ${PYTHON_FILE:-solo_server/templates/basic.py}
+    container_name: "solo-api"
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHON_FILE=${PYTHON_FILE:-solo_server/templates/basic.py}
+
+networks:
+  solo-network:
+    driver: bridge

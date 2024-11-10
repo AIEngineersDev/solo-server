@@ -40,6 +40,14 @@ solo-server start basic  # For basic template
 
 Your server should now be running at `http://localhost:8000`.
 
+3. Test the Server
+
+```bash
+curl -X POST http://localhost:8000/predict \
+  -H 'Content-Type: application/json' \
+  -d '{"prompt": "A story about cats and rats"}'
+```
+
 ## Templates
 
 Solo Server provides several templates to kickstart your project:
@@ -92,27 +100,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## Development
-
-For local development, we recommend using `uv` for dependency management:
-
-1. Install `uv`:
-   ```bash
-   curl -LsSf https://astral.sh/uv/install.sh | sh
-   ```
-
-2. Create a virtual environment and install dependencies:
-   ```bash
-   uv venv
-   uv pip install -e .
-   ```
-
-3. Activate the virtual environment:
-   ```bash
-   . .venv/bin/activate
-   ```
-
-4. Run the server:
-   ```bash
-   solo-server start
-   ```
