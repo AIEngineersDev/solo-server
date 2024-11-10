@@ -1,0 +1,12 @@
+litserve
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch
+torchvision
+requests
+transformers
+torchaudio
+Pillow
+diffusers
+accelerate
+huggingface_hub
+qai-hub-models[stable_diffusion_v2_1_quantized]
