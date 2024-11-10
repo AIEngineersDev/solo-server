@@ -22,7 +22,7 @@ Solo Server is a flexible and privacy-first server framework designed for hostin
 
 ## Quickstart
 
-Requires Python 3.7 or higher.
+Requires Python 3.8 or higher.
 
 1. Install Core Package
 
@@ -30,137 +30,57 @@ Requires Python 3.7 or higher.
 pip install solo-server
 ```
 
-2. Initialize a New Project
-
-Run the `init` command to start a new project. This will guide you through an interactive setup.
+2. Start the Server with a Template
 
 ```bash
-solo-server init
+solo-server start llm  # For language model template
+solo-server start vision  # For computer vision template
+solo-server start basic  # For basic template
 ```
 
-
-<details>
-  <summary>Example Interaction</summary>
-
-```bash
-Welcome to Solo Server Project Initialization!
-----------------------------------------------
-Enter your project name [my_project]: solo_project
-Choose a project template [basic]: llm
-Project 'solo_project' initialized successfully!
-```
-</details>
-
-
-
-
-3. Navigate to Your Project, Install Dependencies, and Run the Server
-
-
-```bash
-solo-server start
-```
-
-
-Your server should now be running at `http://localhost:5010`.
-
-<details>
-  <summary>Test the Server</summary>
-
-Send a POST request to the server or use client.py to test:
-
-   ```bash
-   curl -X POST -H "Content-Type: application/json" \
-        -d '{"prompt": "Hello, world!"}' \
-        http://localhost:5010
-   ```
-</details>
-
+Your server should now be running at `http://localhost:8000`.
 
 ## Templates
 
 Solo Server provides several templates to kickstart your project:
 
-- **basic**: A minimal project setup.
-- **llm**: Language models and text processing.
-- **vision**: Computer vision projects.
-- **audio**: Audio analysis and speech recognition.
-- **nlp**: Language analysis (e.g., NER and sentiment analysis).
-- **tabular**: Data analysis on tabular datasets.
-- **tools**: Tool calling for AI agents such as search, database and cmd execution.
-- **compound**: Complex projects involving multiple AI components.
+- **basic**: A minimal project setup with simple mathematical operations.
+- **llm**: Language models using Llama 3.2B Instruct model.
+- **vision**: Computer vision using ViT model for image classification.
+- **huggingface**: Direct integration with Hugging Face models.
+- **compound**: Multi-modal setup combining text, vision, and audio capabilities.
 
-## Use Cases
+## Core Commands
 
-<details>
-  <summary> Dockerizing Solo Server</summary>
+- **`solo-server start [template]`**: Start the server with specified template.
+- **`solo-server stop`**: Stop the running server.
+- **`solo-server status`**: Check server status.
+- **`solo-server --help`**: Display help information.
 
-1. **Create a Dockerfile**
+## Docker Support
 
-   ```dockerfile
-   # Dockerfile
+Run the server using Docker:
 
-   FROM python:3.9-slim
+```bash
+PYTHON_FILE=templates/llm.py docker-compose up --build
+```
 
-   WORKDIR /app
+The server will be available at `http://localhost:8000` and logs will be displayed automatically.
 
-   COPY requirements.txt .
+## Development
 
-   RUN pip install --no-cache-dir -r requirements.txt
+For local development:
 
-   COPY . .
+1. Clone the repository
+2. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
 
-   EXPOSE 8000
-
-   CMD ["solo-server", "start"]
-   ```
-
-2. **Build the Docker Image**
-
-   ```bash
-   docker build -t my-ai-server .
-   ```
-
-3. **Run the Docker Container**
-
-   ```bash
-   docker run -p 5010:5010 my-ai-server
-   ```
-</details>
-
-
-<details>
-  <summary> NotebookLM (Langauge Model + RAG + Tools)</summary>
-  Coming Soon
-</details>
-
-<details>
-  <summary> Roadio (Vision + Langauge Model + Audio)</summary>
-  Coming Soon
-</details>
-
-<details>
-  <summary> PII Router (Local Langauge Model + Cloud Language Model)</summary>
-  Coming Soon
-</details>
-
-<details>
-  <summary> Llama FS (Langauge Model + Tools)</summary>
-   Coming Soon
-</details>
-
-
-
-## Docs
-
-### Core Commands
-
-- **`solo-server init [template]`**: Initialize a new project with an optional template.
-- **`solo-server start`**: Start the server for the current project.
-- **`solo-server run`**: Run the server for the current project (alias for start).
-- **`solo-server list`**: List available project templates.
-- **`solo-server --help`**: Display help information about commands.
-
+3. Run the server:
+```bash
+solo-server start [template]
+```
 
 ## Contributing
 
