@@ -45,8 +45,12 @@ Your server should now be running at `http://localhost:8000`.
 ```bash
 curl -X POST http://localhost:8000/predict \
   -H 'Content-Type: application/json' \
-  -d '{"prompt": "A story about cats and rats"}'
+  -d '{"prompt": "What is On Device AI?"}'
 ```
+
+For API documentation, please refer to [this link](https://github.com/ggerganov/llama.cpp/blob/master/examples/server/README.md#usage).
+
+
 
 ## Templates
 
