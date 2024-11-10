@@ -5,3 +5,4 @@ documents/*
 __pycache__
 llama.log
 server.log
+*.egg-info
