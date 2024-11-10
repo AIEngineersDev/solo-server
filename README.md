@@ -22,6 +22,9 @@ Solo Server is a flexible and privacy-first server framework designed for hostin
 
 ## Quickstart
 
+<img alt="Fast" src="assets/fast.gif" width="800px" style="max-width: 100%;">
+
+
 Requires Python 3.8 or higher.
 
 1. Install Core Package
