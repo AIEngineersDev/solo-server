@@ -45,11 +45,35 @@ def prompt():
 # Command to start the Solo Server, expects a tag name
 
 @app.command()
-def start(tag: str):
+def start(
+    tag: str,
+    model_url: str = typer.Option(
+        None,
+        "--model-url", "-u",
+        help="URL for the LLM model (only used with llm tag)"
+    ),
+    model_filename: str = typer.Option(
+        None,
+        "--model-filename", "-f",
+        help="Filename for the LLM model (only used with llm tag)"
+    )
+):
     """
     🚀 Start the Solo Server for model inference.
     """
     typer.echo(f"🚀 Starting the Solo Server with tag: {tag}...")
+    
+    if tag == "llm":
+        # Default values for llm tag
+        default_url = "https://huggingface.co/Mozilla/Llama-3.2-1B-Instruct-llamafile/resolve/main/Llama-3.2-1B-Instruct.Q6_K.llamafile"
+        default_filename = "Llama-3.2-1B-Instruct.Q6_K.llamafile"
+        
+        # Use provided values or defaults
+        os.environ["MODEL_URL"] = model_url or default_url
+        os.environ["MODEL_FILENAME"] = model_filename or default_filename
+    elif (model_url or model_filename) and tag != "llm":
+        typer.echo("⚠️ Warning: model-url and model-filename are only used with the llm tag")
+    
     python_file = f"templates/{tag}.py"
     os.environ["PYTHON_FILE"] = python_file
     

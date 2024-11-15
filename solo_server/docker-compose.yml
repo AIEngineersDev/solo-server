@@ -9,6 +9,8 @@ services:
       - "8000:8000"
     environment:
       - PYTHON_FILE=${PYTHON_FILE:-solo_server/templates/basic.py}
+      - MODEL_URL=${MODEL_URL:-your_model_url_here}
+      - MODEL_FILENAME=${MODEL_FILENAME:-your_model_filename_here}
 
 networks:
   solo-network:

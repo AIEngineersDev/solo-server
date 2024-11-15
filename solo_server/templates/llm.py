@@ -7,23 +7,29 @@ import json
 # STEP 1: DEFINE YOUR MODEL API
 class LlamaLitAPI(ls.LitAPI):
     def setup(self, device):
-        model_url = "https://huggingface.co/Mozilla/Llama-3.2-1B-Instruct-llamafile/resolve/main/Llama-3.2-1B-Instruct.Q6_K.llamafile"
-        model_filename = "Llama-3.2-1B-Instruct.Q6_K.llamafile"
+        # Get values from environment variables
+        model_url = os.getenv("MODEL_URL")
+        model_filename = os.getenv("MODEL_FILENAME")
+        
+        if not model_url or not model_filename:
+            raise ValueError("MODEL_URL and MODEL_FILENAME environment variables must be set")
         
         current_dir = os.path.dirname(os.path.abspath(__file__))
         model_path = os.path.join(current_dir, model_filename)
         
-        if not os.path.exists(model_path):
-            print(f"Downloading {model_filename}...")
-            subprocess.run(["wget", "-O", model_path, model_url], check=True)
+        # Create directory if it doesn't exist
+        os.makedirs(os.path.dirname(model_path), exist_ok=True)
+        
+        # Download model
+        subprocess.run(["wget", "-O", model_path, model_url], check=True)
         
         os.chmod(model_path, 0o755)
         
         shell_script_path = os.path.join(current_dir, "run_llama.sh")
         with open(shell_script_path, "w") as f:
-            f.write('''#!/bin/bash
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-"$DIR/Llama-3.2-1B-Instruct.Q6_K.llamafile" --server
+            f.write(f'''#!/bin/bash
+DIR="$( cd "$( dirname "${{BASH_SOURCE[0]}}" )" && pwd )"
+"$DIR/{model_filename}" --server
 ''')
         os.chmod(shell_script_path, 0o755)
         
