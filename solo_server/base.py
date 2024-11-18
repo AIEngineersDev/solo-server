@@ -114,5 +114,26 @@ def benchmark():
     typer.echo("⏹ Stopping Grafana and TimescaleDB...")
     execute_command(["docker-compose", "-f", docker_compose_path, "down"])
 
+@app.command()
+def gui():
+    """
+    🖥️ Launch the Streamlit GUI for Solo Server.
+    """
+    typer.echo("🖥️ Launching Streamlit app...")
+    
+    # Run Streamlit
+    streamlit_command = [
+        "streamlit", 
+        "run", 
+        "templates/streamlit_llm.py"
+    ]
+
+    try:
+        print(execute_command(streamlit_command))
+    except Exception as e:
+        typer.echo(f"❌ Failed to launch Streamlit app: {e}")
+    else:
+        typer.echo("✅ Streamlit app launched successfully.")
+
 if __name__ == "__main__":
     app()
