@@ -103,7 +103,7 @@ def benchmark():
     ]
 
     try:
-        print(execute_command(locust_command))
+        execute_command(locust_command)
     except Exception as e:
         typer.echo(f"❌ Benchmark failed: {e}")
     else:
