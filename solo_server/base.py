@@ -99,16 +99,11 @@ def benchmark():
     # Run Locust benchmark
     locust_command = [
         "locust",
-        "--headless",
-        "--users", "10",
-        "--spawn-rate", "2",
-        "--run-time", "1m",
-        "--host", "http://localhost:8000",
         "--timescale"
     ]
 
     try:
-        execute_command(locust_command)
+        print(execute_command(locust_command))
     except Exception as e:
         typer.echo(f"❌ Benchmark failed: {e}")
     else:
