@@ -1,13 +1,33 @@
-from locust import HttpUser, task
+from locust import HttpUser, task, between
+import json
 
 class SoloServerUser(HttpUser):
-    wait_time = lambda self: 0  # No wait between tasks
+    wait_time = between(1, 2)
 
     @task
-    def generate_text(self):
-        """Simulates text generation requests."""
-        payload = {
-            "prompt": "Generate a Solo app with load tests.",
-            "max_tokens": 100,
+    def test_llm(self):
+        """Test LLM completions endpoint"""
+        headers = {
+            "Content-Type": "application/json"
         }
-        self.client.post("/v1/completions", json=payload)
+        
+        payload = {
+            "prompt": "What is AI?",
+            "n_predict": 128
+        }
+
+        with self.client.post(
+            "/predict",
+            json=payload,
+            headers=headers,
+            catch_response=True
+        ) as response:
+            try:
+                if response.status_code == 200:
+                    response.success()
+                else:
+                    response.failure(f"Failed with status code: {response.status_code}")
+            except json.JSONDecodeError:
+                response.failure("Response could not be decoded as JSON")
+            except Exception as e:
+                response.failure(f"Error: {str(e)}")

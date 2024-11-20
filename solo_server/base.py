@@ -2,6 +2,9 @@ import typer
 from subprocess import run, CalledProcessError, DEVNULL
 import os
 import sys
+import time
+import requests
+import subprocess
 
 app = typer.Typer(help="🛠️ Solo Server CLI for managing edge AI model inference using Docker-style commands.")
 
@@ -83,36 +86,89 @@ def status():
     execute_command(["docker-compose", "-f", docker_compose_path, "ps"])
 
 @app.command()
-def benchmark():
+def benchmark(
+    model_url: str = typer.Option(..., help="URL of the model to benchmark"),
+    model_filename: str = typer.Option(..., help="Filename for the downloaded model"),
+    template: str = typer.Option("llm", help="Template to use for benchmarking")
+):
     """
     🏎️ Run a benchmark test on the Solo Server with TimescaleDB and Grafana integration.
     """
     check_docker_installation()
-    typer.echo("🏎️ Starting benchmark test...")
+    
+    # First start the Solo Server with the specified template
+    typer.echo(f"🚀 Starting the Solo Server with template: {template}...")
+    python_file = f"templates/{template}.py"
+    os.environ["PYTHON_FILE"] = python_file
+    os.environ["MODEL_URL"] = model_url
+    os.environ["MODEL_FILENAME"] = model_filename
+    
+    # Start the main server
     current_dir = os.path.dirname(os.path.abspath(__file__))
     docker_compose_path = os.path.join(current_dir, "docker-compose.yml")
-    
-    # Start TimescaleDB and Grafana
-    typer.echo("🛠️ Setting up Grafana and TimescaleDB...")
     execute_command(["docker-compose", "-f", docker_compose_path, "up", "-d"])
 
-    # Run Locust benchmark
-    locust_command = [
-        "locust",
-        "--timescale"
-    ]
+    # Wait for container to be healthy
+    typer.echo("⏳ Waiting for LLM server to be ready...")
+    start_time = time.time()
+    timeout = 300  # 5 minutes timeout
+    
+    while True:
+        if time.time() - start_time > timeout:
+            typer.echo("❌ LLM server startup timed out")
+            execute_command(["docker-compose", "-f", docker_compose_path, "down"])
+            return
+
+        result = subprocess.run(
+            ["docker", "inspect", "--format", "{{.State.Health.Status}}", "solo-api"],
+            capture_output=True,
+            text=True
+        )
+        status = result.stdout.strip()
+        
+        if status == "healthy":
+            typer.echo("✅ LLM server is ready!")
+            break
+        elif status == "unhealthy":
+            # Print the container logs to help debug
+            typer.echo("Checking container logs:")
+            subprocess.run(["docker", "logs", "solo-api"])
+            typer.echo("❌ LLM server failed to start")
+            execute_command(["docker-compose", "-f", docker_compose_path, "down"])
+            return
+        
+        typer.echo("⏳ Waiting for LLM server to initialize... (Status: " + status + ")")
+        time.sleep(5)
+
+    # Now start the benchmark tools
+    typer.echo("🏎️ Starting benchmark tools...")
+    benchmark_compose_path = os.path.join(current_dir, "docker-compose-benchmark.yml")
+    execute_command(["docker-compose", "-f", benchmark_compose_path, "up", "-d", "timescale", "grafana", "locust"])
 
     try:
-        execute_command(locust_command)
-    except Exception as e:
-        typer.echo(f"❌ Benchmark failed: {e}")
-    else:
-        typer.echo("✅ Benchmark test completed successfully.")
-        typer.echo("📊 Visit Grafana at http://localhost:3000 to view the results.")
+        # Wait for Grafana to be ready
+        typer.echo("⏳ Waiting for Grafana to be ready...")
+        time.sleep(10)
 
-    # Teardown
-    typer.echo("⏹ Stopping Grafana and TimescaleDB...")
-    execute_command(["docker-compose", "-f", docker_compose_path, "down"])
+        # Configure Grafana
+        typer.echo("🔧 Configuring Grafana...")
+        grafana_setup_path = os.path.join(current_dir, "grafana_setup.sh")
+        os.chmod(grafana_setup_path, 0o755)
+        execute_command([grafana_setup_path])
+
+        typer.echo("✅ Benchmark environment is ready!")
+        typer.echo("📊 Visit:")
+        typer.echo("   - Grafana: http://localhost:3000 (admin/admin)")
+        typer.echo("   - Locust: http://localhost:8089")
+        
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        typer.echo("\n⏹ Stopping all services...")
+    finally:
+        # Stop both compose files
+        execute_command(["docker-compose", "-f", docker_compose_path, "down"])
+        execute_command(["docker-compose", "-f", benchmark_compose_path, "down"])
 
 @app.command()
 def gui():

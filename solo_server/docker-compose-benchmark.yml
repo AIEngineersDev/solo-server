@@ -2,13 +2,13 @@ version: '3.7'
 
 services:
   timescale:
-    image: cyberw/locust-timescale:latest
+    image: timescale/timescaledb:latest-pg14
     container_name: timescale_postgres
     environment:
       POSTGRES_PASSWORD: password
-      PGDATA: /var/lib/postgresql/data
+      POSTGRES_DB: locust
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - timescale_postgres_data:/var/lib/postgresql/data
 
@@ -25,34 +25,20 @@ services:
       - grafana_data:/var/lib/grafana
 
   locust:
-    build:
-      context: ./app/benchmark
+    image: locustio/locust:latest
     container_name: locust_benchmark
+    volumes:
+      - ./locustfile.py:/home/locust/locustfile.py
     command: >
-      locust
-      --headless
+      -f /home/locust/locustfile.py
+      --host http://host.docker.internal:8000
       --users 10
       --spawn-rate 2
       --run-time 1m
-      --host http://solo-api:8000
-      --timescale
-    depends_on:
-      - solo-api
-    environment:
-      LOCUST_HOST: http://solo-api:8000
-    networks:
-      - solo-network
-
-  solo-api:
-    build:
-      context: .
-      args:
-        PYTHON_FILE: ${PYTHON_FILE:-solo_server/templates/basic.py}
-    container_name: "solo-api"
-    environment:
-      - PYTHON_FILE=${PYTHON_FILE:-solo_server/templates/basic.py}
-      - MODEL_URL=${MODEL_URL:-your_model_url_here}
-      - MODEL_FILENAME=${MODEL_FILENAME:-your_model_filename_here}
+    ports:
+      - "8089:8089"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
 volumes:
   timescale_postgres_data:
