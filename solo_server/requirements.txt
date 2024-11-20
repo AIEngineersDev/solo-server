@@ -10,3 +10,6 @@ diffusers
 accelerate
 huggingface_hub
 qai-hub-models[stable_diffusion_v2_1_quantized]
+typer 
+locust
+locust-plugins

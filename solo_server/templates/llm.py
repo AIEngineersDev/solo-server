@@ -51,26 +51,74 @@ DIR="$( cd "$( dirname "${{BASH_SOURCE[0]}}" )" && pwd )"
         print("Llama model server started.")
 
     def decode_request(self, request):
-        return request["prompt"]
+        # Handle both POST /predict and direct completion requests
+        if isinstance(request, dict):
+            return request.get("prompt", request.get("input", ""))
+        return request
 
     def predict(self, prompt):
-        response = subprocess.run(["curl", "-X", "POST", "http://localhost:8080/completion", 
-                                 "-H", "Content-Type: application/json", 
-                                 "-d", f'{{"prompt": "{prompt}", "n_predict": 128}}'], 
-                                capture_output=True, text=True)
-        response_json = json.loads(response.stdout)
-        return response_json["content"]
+        try:
+            # Internal request to LLaMA server on 8080
+            response = subprocess.run(
+                ["curl", "-s", "http://localhost:8080/completion",
+                 "-H", "Content-Type: application/json",
+                 "-d", json.dumps({
+                     "prompt": prompt,
+                     "n_predict": 128
+                 })],
+                capture_output=True,
+                text=True,
+                timeout=30
+            )
+            
+            if response.returncode != 0:
+                print(f"Error from LLM server: {response.stderr}")
+                return f"Error: {response.stderr}"
+                
+            result = json.loads(response.stdout)
+            return result.get("content", "No content generated")
+            
+        except Exception as e:
+            print(f"Error in predict: {e}")
+            return f"Error: {str(e)}"
 
     def encode_response(self, output):
-        # Clean up the output by removing system tokens, newlines, and redundant text
-        cleaned_output = output.replace("<|eot_id|>", "")  # Remove system token
-        cleaned_output = cleaned_output.replace("\n", " ")  # Replace newlines with spaces
-        cleaned_output = " ".join(cleaned_output.split())  # Remove extra spaces
-        return {"generated_text": cleaned_output}
+        if isinstance(output, str):
+            cleaned_output = output.replace("<|eot_id|>", "").replace("\n", " ").strip()
+            return {
+                "generated_text": cleaned_output,
+                "status": "success"
+            }
+        return {
+            "error": str(output),
+            "status": "error"
+        }
+
+    def health_check(self):
+        """Health check endpoint"""
+        try:
+            response = subprocess.run(
+                ["curl", "-s", "http://localhost:8080/completion",
+                 "-H", "Content-Type: application/json",
+                 "-d", '{"prompt": "test", "n_predict": 1}'],
+                capture_output=True,
+                timeout=5
+            )
+            return response.returncode == 0
+        except:
+            return False
 
 
 # STEP 2: START THE SERVER
 if __name__ == "__main__":
     api = LlamaLitAPI()
     server = ls.LitServer(api, accelerator="auto")
+    
+    # Add health check endpoint
+    @server.app.get("/health")
+    async def health():
+        if api.health_check():
+            return {"status": "healthy"}
+        return {"status": "unhealthy"}
+    
     server.run(port=8000, generate_client_file=False)
