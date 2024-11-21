@@ -45,6 +45,11 @@ def prompt():
 # Command to start the Solo Server, expects a tag name
 
 @app.command()
+def gui():
+    print("Running GUI now!")
+    execute_command(["streamlit", "run", "gui.py"])
+
+@app.command()
 def start(
     tag: str,
     hf_model: str = typer.Option(
