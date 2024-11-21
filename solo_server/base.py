@@ -85,10 +85,12 @@ def start(
                 typer.echo("❌ Unsupported model format. Currently, only repositories containing 'llamafile' or 'gguf' are supported.")
                 raise typer.Exit(code=1)
 
+            # Extract model name from repository
+            model_name = repository.replace("llamafile", "").strip("-")  # Remove 'llamafile' suffix and clean up
 
             # Construct model URL and filename
-            model_url = f"{base_url}/{username}/{repository}/resolve/main/{repository}.{quantization}"
-            model_filename = f"{repository}.{quantization}"
+            model_filename = f"{model_name}.{quantization}.llamafile"
+            model_url = f"{base_url}/{username}/{repository}/resolve/main/{model_filename}"
         except ValueError as e:
             typer.echo(f"❌ Invalid Hugging Face model format: {e}")
             raise typer.Exit(code=1)
@@ -203,10 +205,12 @@ def benchmark(
                 typer.echo("❌ Unsupported model format. Currently, only repositories containing 'llamafile' or 'gguf' are supported.")
                 raise typer.Exit(code=1)
 
+            # Extract model name from repository
+            model_name = repository.replace("llamafile", "").strip("-")  # Remove 'llamafile' suffix and clean up
 
             # Construct model URL and filename
-            model_url = f"{base_url}/{username}/{repository}/resolve/main/{repository}.{quantization}"
-            model_filename = f"{repository}.{quantization}"
+            model_filename = f"{model_name}.{quantization}.llamafile"
+            model_url = f"{base_url}/{username}/{repository}/resolve/main/{model_filename}"
         except ValueError as e:
             typer.echo(f"❌ Invalid Hugging Face model format: {e}")
             raise typer.Exit(code=1)
