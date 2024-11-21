@@ -17,8 +17,12 @@ setup(
     package_data={
         'solo_server': [
             'templates/*.py',
+            'gui.py',
+            'grafana_setup.sh',
+            'locustfile.py',
             'Dockerfile',
             'docker-compose.yml',
+            'docker-compose-benchmark.yml',
             'requirements.txt',
             'utils.py',
             'base.py',
