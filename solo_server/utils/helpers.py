@@ -17,7 +17,9 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
-def execute_command(command: List[str], error_message: str = "Command execution failed", cwd: Optional[str] = None):
+def execute_command(command: List[str], 
+                    error_message: str = "Command execution failed", 
+                    cwd: Optional[str] = None):
     """
     Executes a system command and handles errors.
 

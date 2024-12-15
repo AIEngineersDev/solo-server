@@ -1,17 +1,15 @@
-# solo_server/cli.py
-
 import typer
 from rich.console import Console
+from utils.hardware import hardware_info
+from utils.helpers import execute_command
 from rich.table import Table
 from rich import box
 import requests
 from pathlib import Path
-import sys
 
 app = typer.Typer(help="🛠️ Solo Server CLI: Manage and Benchmark AI Models")
 console = Console()
 
-# Sample tags for demonstration purposes
 AVAILABLE_TAGS = ["toy-hello-world", "sample-tag", "test-model"]
 
 @app.command()
@@ -23,7 +21,6 @@ def start(tag: str):
         console.print(f"[bold red]❌ Tag '{tag}' not found.[/bold red]")
         raise typer.Exit(code=1)
     console.print(f"[bold green]🚀 Starting Solo Server with tag: {tag}[/bold green]")
-    # Placeholder for actual start logic
     console.print(f"[bold blue]✅ Solo Server for '{tag}' started successfully![/bold blue]")
 
 @app.command()
@@ -35,7 +32,6 @@ def stop(tag: str):
         console.print(f"[bold red]❌ Tag '{tag}' not found.[/bold red]")
         raise typer.Exit(code=1)
     console.print(f"[bold green]⏹ Stopping Solo Server with tag: {tag}[/bold green]")
-    # Placeholder for actual stop logic
     console.print(f"[bold blue]✅ Solo Server for '{tag}' stopped successfully![/bold blue]")
 
 @app.command()
@@ -46,7 +42,6 @@ def status(tag: str):
     if tag not in AVAILABLE_TAGS:
         console.print(f"[bold red]❌ Tag '{tag}' not found.[/bold red]")
         raise typer.Exit(code=1)
-    # Placeholder for actual status check logic
     console.print(f"[bold green]📈 Solo Server for '{tag}' is running.[/bold green]")
 
 @app.command()
@@ -58,10 +53,7 @@ def test(tag: str):
         console.print(f"[bold red]❌ Tag '{tag}' not found.[/bold red]")
         raise typer.Exit(code=1)
     console.print(f"[bold yellow]🧪 Testing Solo Server for tag: {tag}...[/bold yellow]")
-    # Placeholder for actual test logic (e.g., sending a request)
-    # Simulate a successful test
     try:
-        # Simulated response
         response = {"status": "success", "message": f"Test for '{tag}' passed!"}
         console.print(f"[bold green]✅ {response['message']}[/bold green]")
     except Exception as e:
@@ -77,7 +69,6 @@ def benchmark(tag: str):
         console.print(f"[bold red]❌ Tag '{tag}' not found.[/bold red]")
         raise typer.Exit(code=1)
     console.print(f"[bold magenta]🚦 Benchmarking Solo Server for tag: {tag}...[/bold magenta]")
-    # Placeholder for actual benchmarking logic
     console.print(f"[bold blue]✅ Benchmarking for '{tag}' completed successfully![/bold blue]")
 
 @app.command()
@@ -103,7 +94,6 @@ def download(tag: str, url: str):
         console.print(f"[bold red]❌ Tag '{tag}' not found.[/bold red]")
         raise typer.Exit(code=1)
     console.print(f"[bold green]⬇️ Downloading model weights for tag: {tag} from {url}...[/bold green]")
-    # Define the download path
     download_path = Path(f"models/{tag}_weights.pth")
     download_path.parent.mkdir(parents=True, exist_ok=True)
     try:
@@ -121,10 +111,9 @@ def download(tag: str, url: str):
 @app.callback()
 def main():
     """
-    Solo Server CLI: Manage and Benchmark AI Models.
+    Default command to display hardware information.
     """
-    if len(sys.argv) == 1:
-        console.print("[bold magenta]Welcome to Solo Server CLI! Use --help to see available commands.[/bold magenta]")
+    hardware_info()
 
 if __name__ == "__main__":
     app()
