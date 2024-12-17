@@ -7,7 +7,15 @@ from rich import box
 import requests
 from pathlib import Path
 
-app = typer.Typer(help="🛠️ Solo Server CLI: Manage and Benchmark AI Models")
+# Main application with updated help text mentioning hardware benchmark
+app = typer.Typer(help=(
+    "🛠️ Solo Server CLI: Manage and Benchmark AI Models\n\n"
+    "This CLI provides commands to start, stop, check status, test, and benchmark AI model servers.\n"
+    "Additionally, it provides options to download model weights.\n\n"
+    "Hardware Benchmark:\n"
+    "The CLI will display current hardware benchmark information automatically on startup, and also at the top of 'start' and 'status' commands."
+))
+
 console = Console()
 
 AVAILABLE_TAGS = ["toy-hello-world", "sample-tag", "test-model"]
@@ -17,6 +25,9 @@ def start(tag: str):
     """
     🚀 Start the Solo Server for a specific tag.
     """
+    # Show hardware benchmark info at the top
+    hardware_info()
+
     if tag not in AVAILABLE_TAGS:
         console.print(f"[bold red]❌ Tag '{tag}' not found.[/bold red]")
         raise typer.Exit(code=1)
@@ -39,6 +50,9 @@ def status(tag: str):
     """
     📈 Check the status of the Solo Server for a specific tag.
     """
+    # Show hardware benchmark info at the top
+    hardware_info()
+
     if tag not in AVAILABLE_TAGS:
         console.print(f"[bold red]❌ Tag '{tag}' not found.[/bold red]")
         raise typer.Exit(code=1)
@@ -111,8 +125,10 @@ def download(tag: str, url: str):
 @app.callback()
 def main():
     """
-    Default command to display hardware information.
+    Default command to display hardware and general info.
+    The hardware benchmark will be displayed automatically.
     """
+    # This ensures hardware info is shown by default (e.g., on `--help` and no-command)
     hardware_info()
 
 if __name__ == "__main__":
