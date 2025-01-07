@@ -1,11 +1,12 @@
 # Solo Server
 
-![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)
-![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)
-![GitHub Issues](https://img.shields.io/github/issues/your-repo/solo-server)
-![GitHub Stars](https://img.shields.io/github/stars/your-repo/solo-server?style=social)
+<img src="assets/logo/logo.png" alt="Solovision Logo" width="200"/>
 
-**Simple. Private. Effective.**
+[![Python 3.9+](https://img.shields.io/badge/Python-3.9%2B-blue.svg)](https://www.python.org/downloads/)
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/solo-server)](https://pypi.org/project/solo-server/)
+[![PyPI - Version](https://img.shields.io/pypi/v/solovision)](https://pypi.org/project/solo-server/)
+
 
 Solo Server is a privacy-first framework designed for hosting and managing AI models locally. With support for various AI workflows, including language models, computer vision, audio processing, tabular data, and compound AI, Solo Server ensures simplicity, flexibility, and high performance.
 
