@@ -110,8 +110,8 @@ def interactive_setup():
     """
     Runs an interactive setup to configure Solo CLI with hardware detection.
     """
-    typer.echo("🔧 Welcome to Solo CLI Setup!")
-    typer.echo("We'll configure your settings and API keys.")
+    typer.echo("🔧 Welcome to Solo Setup!")
+    typer.echo("Let'sconfigure your settings and API keys.")
 
     # Ensure config directory exists
     os.makedirs(os.path.dirname(CONFIG_FILE), exist_ok=True)
@@ -126,16 +126,14 @@ def interactive_setup():
     config["DEFAULT"]["MODEL_REGISTRY"] = typer.prompt("🌍 Model registry (ramalama/ollama)", default="ramalama")
     config["DEFAULT"]["MODEL_PATH"] = typer.prompt("📂 Model storage path", default=os.path.expanduser("~/solo/models"))
     config["DEFAULT"]["COMPUTE_BACKEND"] = typer.prompt(f"⚙️ Compute backend (CPU/CUDA/HIP/SYCL/Vulkan) [Recommended: {compute_backend}]", default=compute_backend)
-    config["DEFAULT"]["SERVER_PORT"] = typer.prompt("🌐 Server port", default="8080")
+    config["DEFAULT"]["SERVER_PORT"] = typer.prompt("🌐 Server port", default="5070")
     config["DEFAULT"]["LOG_LEVEL"] = typer.prompt("🔍 Logging level (INFO/DEBUG/ERROR)", default="INFO")
 
     # API Keys
     typer.echo("🔑 Enter API keys (leave blank to skip).")
     config["DEFAULT"]["NGROK_API_KEY"] = typer.prompt("Ngrok API Key", default="", show_default=False)
     config["DEFAULT"]["REPLICATE_API_KEY"] = typer.prompt("Replicate API Key", default="", show_default=False)
-    config["DEFAULT"]["OLLAMA_API_KEY"] = typer.prompt("Ollama API Key", default="", show_default=False)
-    config["DEFAULT"]["RAMALAMA_API_KEY"] = typer.prompt("Ramalama API Key", default="", show_default=False)
-
+    
     # Store detected hardware details
     config["DEFAULT"]["CPU_MODEL"] = cpu_model
     config["DEFAULT"]["CPU_CORES"] = str(cpu_cores)
