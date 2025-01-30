@@ -5,36 +5,15 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="solo-server",
-    version="0.3.4",
+    version="0.3.5",
     author="Dhruv Diddi",
     author_email="dhruv.diddi@gmail.com",
-    description="Powering Physical AI.",
+    description="AIOps for the Physical World.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/AIEngineersDev/solo-server",
-    packages=find_packages(),
+    packages=find_packages(include=["solo_server", "solo_server.*"]),
     include_package_data=True,
-    package_data={
-        'solo_server': [
-            'templates/*.py',
-            'gui.py',
-            'grafana_setup.sh',
-            'locustfile.py',
-            'Dockerfile',
-            'docker-compose.yml',
-            'docker-compose-benchmark.yml',
-            'requirements.txt',
-            'utils.py',
-            'base.py',
-        ],
-    },
-    data_files=[
-        ('solo_server', [
-            'solo_server/Dockerfile',
-            'solo_server/docker-compose.yml',
-            'solo_server/requirements.txt'
-        ]),
-    ],
     install_requires=[
         "typer",
     ],

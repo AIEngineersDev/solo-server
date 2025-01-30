@@ -4,7 +4,7 @@ import subprocess
 app = typer.Typer()
 
 @app.command()
-def check():
+def status():
     """Check running models."""
     typer.echo("Checking running model containers...")
-    subprocess.run(["docker", "ps", "--filter", "name=solo-container"], check=True)
+    subprocess.run(["podman", "ps", "--filter", "name=solo-container"], check=True)
