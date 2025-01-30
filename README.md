@@ -19,13 +19,13 @@ Solo Server is a lightweight platform that enables users to manage and monitor A
 
 ## Features
 
-- **Seamless Setup:** Manage your on device AI with a simple CLI and HTTP server
+- **Seamless Setup:** Manage your on device AI with a simple CLI and HTTP servers
 - **Open Model Registry:** Pull models from registries like Hugging Face and Ollama
 - **Lean Load Testing:** Built-in commands to benchmark endpoints
 - **Cross-Platform Compatibility:** Deploy AI models effortlessly on your hardware
 - **Configurable Framework:** Auto-detect hardware (CPU, GPU, RAM) and sets configs
 
-## ** Supported Models**
+## Supported Models
 Solo Server supports **multiple model sources**, including **Ollama, Hugging Face, and Ramalama**.
 
 | **Model Name**         | **Source**                                                |
@@ -51,7 +51,7 @@ Solo Server supports **multiple model sources**, including **Ollama, Hugging Fac
 - [Project Inspiration](#project-inspiration)
 - [License](#-license)
 
-### Installation
+## Installation
 
 ### **🔹 Install via PyPI**
 ```sh
@@ -66,7 +66,7 @@ curl -sSL https://getsolo.tech/install.sh | bash
 
 
 
-## **Initial Setup**
+## Setup
 Run the **interactive setup** to configure Solo Server:
 ```sh
 solo setup
@@ -84,8 +84,7 @@ solo setup
 ```sh
 solo pull llama3
 ```
-✅ **Downloads AI models from the configured registry.**  
-✅ **Supports multiple registries: Ramalama, Ollama, Hugging Face.**  
+ 
 
 ---
 
@@ -93,8 +92,6 @@ solo pull llama3
 ```sh
 solo serve llama3
 ```
-✅ **Starts a model in a container.**  
-✅ **Optimizes execution based on hardware detection.**  
 
 **Access the UI at:**  
 ```sh
@@ -107,8 +104,7 @@ http://127.0.0.1:5070  #SOLO_SERVER_PORT
 ```sh
 solo benchmark llama3
 ```
-✅ **Evaluates AI model performance and generates reports.**  
-✅ **Supports accuracy, F1-score, confusion matrix, tokens per second, and real-time inference speed.**  
+
 
 **Example Output:**
 ```sh
