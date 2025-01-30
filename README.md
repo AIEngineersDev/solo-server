@@ -25,10 +25,26 @@ Solo Server is a lightweight platform that enables users to manage and monitor A
 - **Cross-Platform Compatibility:** Deploy AI models effortlessly on your hardware
 - **Configurable Framework:** Auto-detect hardware (CPU, GPU, RAM) and sets configs
 
+## ** Supported Models**
+Solo Server supports **multiple model sources**, including **Ollama, Hugging Face, and Ramalama**.
+
+| **Model Name**         | **Source**                                                |
+|------------------------|----------------------------------------------------------|
+| **DeepSeek R1**        | `ollama://deepseek-r1`                                   |
+| **IBM Granite 3.1**    | `ollama://granite3.1-dense`                              |
+| **Granite Code 8B**    | `hf://ibm-granite/granite-8b-code-base-4k-GGUF`          |
+| **Granite Code 20B**   | `hf://ibm-granite/granite-20b-code-base-8k-GGUF`         |
+| **Granite Code 34B**   | `hf://ibm-granite/granite-34b-code-base-8k-GGUF`         |
+| **Mistral 7B**         | `hf://TheBloke/Mistral-7B-Instruct-v0.2-GGUF`            |
+| **Mistral 7B v3**      | `hf://MaziyarPanahi/Mistral-7B-Instruct-v0.3-GGUF`       |
+| **Hermes 2 Pro**       | `hf://NousResearch/Hermes-2-Pro-Mistral-7B-GGUF`        |
+| **Cerebrum 1.0 7B**    | `hf://froggeric/Cerebrum-1.0-7b-GGUF`                    |
+| **Dragon Mistral 7B**  | `hf://llmware/dragon-mistral-7b-v0`  
 
 ## Table of Contents
 
 - [Features](#-features)
+- [Supported Models](#supported-models)
 - [Installation](#installation)
 - [Commands](#commands)
 - [Configuration](#configuration)
@@ -187,6 +203,7 @@ solo setup
 
 This project wouldn't be possible without the help of other projects like:
 
+* uv
 * llama.cpp
 * ramalama
 * ollama
