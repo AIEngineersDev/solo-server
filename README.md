@@ -5,9 +5,9 @@
 <img src="assets/logo/logo.png" alt="Solovision Logo" width="200"/>
 
 [![Python 3.9+](https://img.shields.io/badge/Python-3.9%2B-blue.svg)](https://www.python.org/downloads/)
-[![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
+[![License: MIT](https://img.shields.io/pypi/l/solo-server)](https://opensource.org/licenses/MIT)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/solo-server)](https://pypi.org/project/solo-server/)
-[![PyPI - Version](https://img.shields.io/pypi/v/solovision)](https://pypi.org/project/solo-server/)
+[![PyPI - Version](https://img.shields.io/pypi/v/solo-server)](https://pypi.org/project/solo-server/)
 
 </div>
 
@@ -49,7 +49,6 @@ Solo Server supports **multiple model sources**, including **Ollama, Hugging Fac
 - [Commands](#commands)
 - [Configuration](#configuration)
 - [Project Inspiration](#project-inspiration)
-- [License](#-license)
 
 ## Installation
 
@@ -62,20 +61,17 @@ pip install solo-server
 ```sh
 curl -sSL https://getsolo.tech/install.sh | bash
 ```
-**Creates an isolated environment using `uv` for performance and stability.**  
+Creates an isolated environment using `uv` for performance and stability.  
 
-
-
-## Setup
 Run the **interactive setup** to configure Solo Server:
 ```sh
 solo setup
 ```
 ### **🔹 Setup Features**
 ✔️ **Detects CPU, GPU, RAM** for **hardware-optimized execution**  
-✔️ **Auto-configures `solo.conf` with best settings**  
+✔️ **Auto-configures `solo.conf` with optimal settings**  
 ✔️ **Requests API keys for Ngrok and Replicatea**  
-✔️ **Recommends the best compute backend OCI (CUDA, HIP, SYCL, Vulkan, CPU, Metal)**  
+✔️ **Recommends the compute backend OCI (CUDA, HIP, SYCL, Vulkan, CPU, Metal)**  
 
 ---
 
@@ -156,8 +152,8 @@ solo stop llama3
 ```
 **Example Output:**
 ```sh
-🛑 Stopping llama3...
-✅ llama3 stopped successfully.
+Stopping llama3...
+llama3 stopped successfully.
 ```
 
 ---
@@ -210,4 +206,4 @@ This project wouldn't be possible without the help of other projects like:
 * llamafile
 * cog
 
-Like using Solo, consider leaving a ⭐ on GitHub
+Like using Solo, consider leaving us a ⭐ on GitHub
