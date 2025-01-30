@@ -11,196 +11,190 @@
 
 </div>
 
-Solo Server is a privacy-first framework designed for hosting and managing AI models locally. With support for various AI workflows, including language models, computer vision, audio processing, tabular data, and compound AI, Solo Server ensures simplicity, flexibility, and high performance.
+Solo Server is a lightweight platform that enables users to manage and monitor AI models on their hardware.
 
 <div align="center">
   <img src="assets/logo/solostart.gif" alt="SoloStart">
 </div>
 
-## 🚀 Features
+## Features
 
-- **Seamless Setup:** Manage your AI server with a simple CLI.
-- **Tagged Templates:** Pre-configured templates for common AI workflows.
-- **Load Testing and Profiling:** Built-in commands to test, profile, and benchmark endpoints.
-- **Cross-Platform Compatibility:** Deploy AI models effortlessly on any platform.
-- **Extensible Framework:** Add custom workflows and models with ease.
+- **Seamless Setup:** Manage your on device AI with a simple CLI and HTTP server
+- **Open Model Registry:** Pull models from registries like Hugging Face and Ollama
+- **Lean Load Testing:** Built-in commands to benchmark endpoints
+- **Cross-Platform Compatibility:** Deploy AI models effortlessly on your hardware
+- **Configurable Framework:** Auto-detect hardware (CPU, GPU, RAM) and sets configs
 
-## 📦 Table of Contents
+
+## Table of Contents
 
 - [Features](#-features)
-- [Quickstart](#quickstart)
-- [🎯 Tagged Templates](#-tagged-templates)
-  - [🔧 Toy Models](#-toy-models)
-  - [🧠 Language Models (LLMs)](#-language-models-llms)
-  - [🔍 Retrieval-Augmented Generation (RAG)](#-retrieval-augmented-generation-rag)
-  - [✍️ Natural Language Processing (NLP)](#-natural-language-processing-nlp)
-  - [🎨 Multimodal Models](#-multimodal-models)
-  - [🔉 Audio Models](#-audio-models)
-  - [🖼 Vision Models](#-vision-models)
-  - [🎙 Speech Models](#-speech-models)
-  - [🛠 Classical ML Models](#-classical-ml-models)
-  - [🗂 Miscellaneous](#-miscellaneous)
-- [🛠 Core Commands](#-core-commands)
-- [📦 Development and Contributions](#-development-and-contributions)
-- [📜 License](#-license)
-
-## Quickstart
-
-### Prerequisites
-
-- **Python 3.8** or higher
+- [Installation](#installation)
+- [Commands](#commands)
+- [Configuration](#configuration)
+- [Project Inspiration](#project-inspiration)
+- [License](#-license)
 
 ### Installation
 
-1. **Install Core Package**
+### **🔹 Install via PyPI**
+```sh
+pip install solo-server
+```
 
-    ```bash
-    pip install solo-server
-    ```
+### **🔹 Install with `uv` (Recommended)**
+```sh
+curl -sSL https://getsolo.tech/install.sh | bash
+```
+**Creates an isolated environment using `uv` for performance and stability.**  
 
-2. **Start the Server with a Template**
 
-    ```bash
-    solo-server start toy-hello-world
-    ```
 
-    The server will start at [http://localhost:8000](http://localhost:8000).
+## **Initial Setup**
+Run the **interactive setup** to configure Solo Server:
+```sh
+solo setup
+```
+### **🔹 Setup Features**
+✔️ **Detects CPU, GPU, RAM** for **hardware-optimized execution**  
+✔️ **Auto-configures `solo.conf` with best settings**  
+✔️ **Requests API keys for Ngrok and Replicatea**  
+✔️ **Recommends the best compute backend OCI (CUDA, HIP, SYCL, Vulkan, CPU, Metal)**  
 
-3. **Test the Server**
+---
 
-    ```bash
-    solo-server test toy-hello-world
-    ```
+## **Commands**
+### **1️⃣ Pull a Model**
+```sh
+solo pull llama3
+```
+✅ **Downloads AI models from the configured registry.**  
+✅ **Supports multiple registries: Ramalama, Ollama, Hugging Face.**  
 
-4. **Profile the Server**
+---
 
-    ```bash
-    solo-server profile toy-hello-world --requests-count 20
-    ```
+### **2️⃣ Serve a Model**
+```sh
+solo serve llama3
+```
+✅ **Starts a model in a container.**  
+✅ **Optimizes execution based on hardware detection.**  
 
-5. **Benchmark the Server**
+**Access the UI at:**  
+```sh
+http://127.0.0.1:5070  #SOLO_SERVER_PORT
+```
 
-    ```bash
-    solo-server benchmark toy-hello-world
-    ```
+---
 
-## 🎯 Tagged Templates
+### **3️⃣ Benchmark a Model**
+```sh
+solo benchmark llama3
+```
+✅ **Evaluates AI model performance and generates reports.**  
+✅ **Supports accuracy, F1-score, confusion matrix, tokens per second, and real-time inference speed.**  
 
-### 🔧 Toy Models
+**Example Output:**
+```sh
+Running benchmark for llama3...
+🔹 Model Size: 7B
+🔹 Compute Backend: CUDA
+🔹 Prompt Processing Speed: 1450 tokens/s
+🔹 Text Generation Speed: 135 tokens/s
 
-| Tag                 | Description                                 |
-|---------------------|---------------------------------------------|
-| `toy-hello-world`   | Simple chatbot: Input text, return greeting |
-| `toy-simple-image`  | Generate a 256x256 solid-color image        |
-| `toy-number-guess`  | User guesses a randomly generated number     |
-| `toy-math-solver`   | Solve simple math equations from input      |
-| `toy-basic-api`     | A Flask API for echoing user inputs         |
+Running classification accuracy test...
+🔹 Batch 0 Accuracy: 0.7300
+🔹 Batch 1 Accuracy: 0.7520
+🔹 Batch 2 Accuracy: 0.7800
+🔹 Overall Accuracy: 0.7620
 
-### 🧠 Language Models (LLMs)
+Running additional benchmarks...
+🔹 F1 Score: 0.8150
+🔹 Confusion Matrix:
+tensor([[10,  2,  1,  0,  0],
+        [ 1, 12,  0,  0,  0],
+        [ 0,  0, 11,  0,  1],
+        [ 0,  0,  0, 13,  0],
+        [ 0,  0,  0,  0, 15]])
+Benchmarking complete!
+```
 
-| Tag                  | Description                               |
-|----------------------|-------------------------------------------|
-| `llm-llama32`        | Meta Llama 3.2 for general language tasks |
-| `llm-proxy-server`   | Proxy server managing multiple LLM requests |
-| `llm-agent-tools`    | LangChain agent for tool-based reasoning  |
-| `llm-chat-gpt3`      | Chatbot using OpenAI GPT-3 API             |
-| `llm-chat-opt`       | Meta OPT for lightweight chatbot setup     |
+---
 
-### 🔍 Retrieval-Augmented Generation (RAG)
+### **4️⃣ Check Model Status**
+```sh
+solo status
+```
+**Example Output:**
+```sh
+🔹 Running Models:
+-------------------------------------------
+| Name      | Model   | Backend | Port |
+|----------|--------|---------|------|
+| llama3   | Llama3 | CUDA    | 8080 |
+| gptj     | GPT-J  | CPU     | 8081 |
+-------------------------------------------
+```
 
-| Tag                       | Description                              |
-|---------------------------|------------------------------------------|
-| `rag-vllm-llama32`        | Combine retrieval with Llama 3.2 in vLLM  |
-| `rag-api-llamaindex`      | LlamaIndex API for document search        |
-| `rag-haystack`            | Haystack RAG pipeline for Q&A             |
-| `rag-semantic-search`     | Semantic search with embeddings           |
-| `rag-contextual-chat`     | RAG-powered contextual chatbot            |
+---
 
-### ✍️ Natural Language Processing (NLP)
+### **5️⃣ Stop a Model**
+```sh
+solo stop llama3
+```
+**Example Output:**
+```sh
+🛑 Stopping llama3...
+✅ llama3 stopped successfully.
+```
 
-| Tag                    | Description                                     |
-|------------------------|-------------------------------------------------|
-| `nlp-huggingface`      | BERT for text classification tasks              |
-| `nlp-text-embedding`   | Sentence embedding for similarity search        |
-| `nlp-gpt-neo`          | GPT-Neo for creative text generation            |
-| `nlp-named-entities`   | Named Entity Recognition using SpaCy            |
-| `nlp-text-summarizer`  | Summarize long documents with T5                 |
+---
 
-### 🎨 Multimodal Models
+## **⚙️ Configuration (`solo.conf`)**
+After setup, all settings are stored in:
+```sh
+~/.solo/solo.conf
+```
+Example:
+```ini
+# Solo Server Configuration
 
-| Tag                     | Description                                      |
-|-------------------------|--------------------------------------------------|
-| `multimodal-clip`       | CLIP for text-image linking                       |
-| `multimodal-pixtral`    | Custom image generation with Pixtral              |
-| `multimodal-qwen-vl`    | Qwen2-VL for image-text Q&A                       |
-| `multimodal-phi35`      | Phi-3.5 Vision for visual instructions            |
-| `multimodal-minicpm`    | MiniCPM for multilingual multimodal tasks         |
+MODEL_REGISTRY=ramalama
+MODEL_PATH=/home/user/solo/models
+COMPUTE_BACKEND=CUDA
+SERVER_PORT=5070
+LOG_LEVEL=INFO
 
-### 🔉 Audio Models
+# Hardware Detection
+CPU_MODEL="Intel i9-13900K"
+CPU_CORES=24
+MEMORY_GB=64
+GPU_VENDOR="NVIDIA"
+GPU_MODEL="RTX 3090"
 
-| Tag                   | Description                                     |
-|-----------------------|-------------------------------------------------|
-| `audio-whisper`       | Whisper for speech-to-text transcription         |
-| `audio-audiocraft`    | Generate music tracks with AudioCraft             |
-| `audio-noise-filter`  | Remove background noise with DeepFilterNet        |
-| `audio-stableaudio`   | Generate high-quality audio tracks                |
-| `audio-keyword-detect`| Wake word detection with low latency              |
+# API Keys
+NGROK_API_KEY="your-ngrok-key"
+REPLICATE_API_KEY="your-replicate-key"
+```
+✅ **Modify this file anytime and run:**
+```sh
+solo setup
+```
 
-### 🖼 Vision Models
+---
 
-| Tag                   | Description                                       |
-|-----------------------|---------------------------------------------------|
-| `vision-stable-diff2` | Generate images with Stable Diffusion 2            |
-| `vision-object-detect`| Detect objects in images with YOLOv5               |
-| `vision-face-detect`  | Detect faces using DLib or RetinaFace              |
-| `vision-pose-estimate`| Human pose estimation with OpenPose               |
-| `vision-bg-remove`    | Remove image backgrounds using DeepLab            |
+## 📝 Project Inspiration 
 
-### 🎙 Speech Models
+This project wouldn't be possible without the help of other projects like:
 
-| Tag                   | Description                                        |
-|-----------------------|----------------------------------------------------|
-| `speech-xtts-v2`      | Text-to-speech conversion using XTTS V2             |
-| `speech-parler-tts`   | Real-time speech synthesis with Parler-TTS          |
-| `speech-voice-clone`  | Clone voices using Tacotron 2                        |
-| `speech-enhancement`  | Improve speech quality with SpeechBrain             |
-| `speech-lang-id`      | Identify spoken language in audio files             |
+* llama.cpp
+* ramalama
+* ollama
+* whisper.cpp
+* vllm
+* podman
+* huggingface
+* llamafile
+* cog
 
-### 🛠 Classical ML Models
-
-| Tag                  | Description                                      |
-|----------------------|--------------------------------------------------|
-| `ml-random-forest`   | Classify data using Random Forest models          |
-| `ml-xgboost`         | Predict outcomes with XGBoost                     |
-| `ml-svm`             | Support Vector Machines for binary tasks          |
-| `ml-logistic-reg`    | Predict probabilities with Logistic Regression     |
-| `ml-knn`             | K-Nearest Neighbors for clustering tasks           |
-
-### 🗂 Miscellaneous
-
-| Tag                   | Description                                    |
-|-----------------------|------------------------------------------------|
-| `misc-ffmpeg-api`     | Convert media formats using FFmpeg              |
-| `misc-unified-pytf`   | Unified API for PyTorch and TensorFlow tasks     |
-| `misc-video-edit`     | Edit videos with ffmpeg and OpenCV               |
-| `misc-file-convert`   | Convert file formats (e.g., docx to pdf)         |
-| `misc-lang-detection` | Detect language from a text file                 |
-
-## 🛠 Core Commands
-
-| Command                          | Description                               |
-|----------------------------------|-------------------------------------------|
-| `solo-server start [tag]`        | Start the server for a specific tag.      |
-| `solo-server stop`               | Stop the running server.                   |
-| `solo-server status`             | Check server status.                       |
-| `solo-server test [tag]`         | Test the endpoint for a tag.               |
-| `solo-server profile [tag]`      | Profile the endpoint for a tag.            |
-| `solo-server benchmark [tag]`    | Load test the endpoint for a tag.          |
-
-## 📦 Development and Contributions
-
-### Clone the Repository
-
-```bash
-git clone https://github.com/your-repo/solo-server.git
-cd solo-server
+Like using Solo, consider leaving a ⭐ on GitHub
