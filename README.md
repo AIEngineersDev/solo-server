@@ -20,13 +20,13 @@ Solo Server is a lightweight platform that enables users to manage and monitor A
 ## Features
 
 - **Seamless Setup:** Manage your on device AI with a simple CLI and HTTP servers
-- **Open Model Registry:** Pull models from registries like Hugging Face and Ollama
+- **Open Model Registry:** Pull models from registries like  Ollama & Hugging Face
 - **Lean Load Testing:** Built-in commands to benchmark endpoints
 - **Cross-Platform Compatibility:** Deploy AI models effortlessly on your hardware
 - **Configurable Framework:** Auto-detect hardware (CPU, GPU, RAM) and sets configs
 
 ## Supported Models
-Solo Server supports **multiple model sources**, including **Ollama, Hugging Face, and Ramalama**.
+Solo Server supports **multiple model sources**, including **Ollama & Hugging Face**.
 
 | **Model Name**         | **Source**                                                |
 |------------------------|----------------------------------------------------------|
@@ -39,7 +39,7 @@ Solo Server supports **multiple model sources**, including **Ollama, Hugging Fac
 | **Mistral 7B v3**      | `hf://MaziyarPanahi/Mistral-7B-Instruct-v0.3-GGUF`       |
 | **Hermes 2 Pro**       | `hf://NousResearch/Hermes-2-Pro-Mistral-7B-GGUF`        |
 | **Cerebrum 1.0 7B**    | `hf://froggeric/Cerebrum-1.0-7b-GGUF`                    |
-| **Dragon Mistral 7B**  | `hf://llmware/dragon-mistral-7b-v0`  
+| **Dragon Mistral 7B**  | `hf://llmware/dragon-mistral-7b-v0`                      |
 
 ## Table of Contents
 
@@ -51,6 +51,12 @@ Solo Server supports **multiple model sources**, including **Ollama, Hugging Fac
 - [Project Inspiration](#project-inspiration)
 
 ## Installation
+
+### **🔹Prerequisites** 
+
+- **🐋 Docker:** Required for containerization 
+  - [Install Docker](https://docs.docker.com/get-docker/)
+  - Ensure Docker daemon is running
 
 ### **🔹 Install via PyPI**
 ```sh
@@ -65,22 +71,39 @@ Creates an isolated environment using `uv` for performance and stability.
 
 Run the **interactive setup** to configure Solo Server:
 ```sh
-solo setup
+solo start
 ```
 ### **🔹 Setup Features**
 ✔️ **Detects CPU, GPU, RAM** for **hardware-optimized execution**  
 ✔️ **Auto-configures `solo.conf` with optimal settings**  
-✔️ **Requests API keys for Ngrok and Replicatea**  
+✔️ **Requests API keys for Ngrok and Replicate**  
 ✔️ **Recommends the compute backend OCI (CUDA, HIP, SYCL, Vulkan, CPU, Metal)**  
 
 ---
 
-## **Commands**
-### **1️⃣ Pull a Model**
+**Example Output:**
 ```sh
-solo pull llama3
+🖥️  System Information
+Operating System: Windows
+CPU: AMD64 Family 23 Model 96 Stepping 1, AuthenticAMD
+CPU Cores: 8
+Memory: 15.42GB
+GPU: NVIDIA
+GPU Model: NVIDIA GeForce GTX 1660 Ti
+GPU Memory: 6144.0GB
+Compute Backend: CUDA
+
+🚀 Setting up Solo Server...
+✅ Solo server is ready!
 ```
- 
+
+---
+
+## **Commands**
+### **1️⃣ Pull & Run a Model**
+```sh
+solo run llama3.2
+```
 
 ---
 
@@ -94,6 +117,39 @@ solo serve llama3
 http://127.0.0.1:5070  #SOLO_SERVER_PORT
 ```
 
+---
+
+## Diagram
+
+```
++-------------------+
+|                   |
+| solo run llama3.2 |
+|                   |
++---------+---------+
+	      |
+	      |
+          |           +------------------+           +----------------------+
+          |           | Pull inferencing |           |   Pull model layer   |
+          +-----------| runtime (cuda)   |---------->|       llama3.2       | 
+                      +------------------+           +----------------------+
+                                                     |     Repo options     |
+                                                     ++-----------+--------++
+                                                      |           |        |
+                                                      v           v        v
+                                                +----------+ +----------+ +-------------+
+                                                | Ollama   | | vLLM     | | HuggingFace |
+                                                | Registry | | registry | |  Registry   |
+                                                +-----+------+---+------+-++------------+
+                                                      |          |         |
+                                                      v          v         v
+                                                      +---------------------+
+                                                      |   Start with        |
+                                                      |   cuda runtime      |
+                                                      |   and               |
+                                                      |   llama3.2          |
+                                                      +---------------------+
+```
 ---
 
 ### **3️⃣ Benchmark a Model**
@@ -148,12 +204,12 @@ solo status
 
 ### **5️⃣ Stop a Model**
 ```sh
-solo stop llama3
+solo stop 
 ```
 **Example Output:**
 ```sh
-Stopping llama3...
-llama3 stopped successfully.
+🛑 Stopping Solo Server...
+✅ Solo server stopped successfully.
 ```
 
 ---
