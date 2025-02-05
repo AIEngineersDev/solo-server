@@ -127,8 +127,8 @@ http://127.0.0.1:5070  #SOLO_SERVER_PORT
 | solo run llama3.2 |
 |                   |
 +---------+---------+
-	      |
-	      |
+          |
+          |
           |           +------------------+           +----------------------+
           |           | Pull inferencing |           |   Pull model layer   |
           +-----------| runtime (cuda)   |---------->|       llama3.2       | 
