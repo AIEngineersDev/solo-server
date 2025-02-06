@@ -32,31 +32,29 @@ def detect_hardware() -> Tuple[str, int, float, str, str, float, str, str]:
     gpu_vendor = "None"
     gpu_model = "None"
     compute_backend = "CPU"
-    try:
-        gpus = GPUtil.getGPUs()
-        if gpus:
-            gpu = gpus[0]  # Get first GPU
-            gpu_model = gpu.name
-            gpu_memory = round(gpu.memoryTotal, 2)  # GPU memory in GB
-            if "NVIDIA" in gpu_model:
-                gpu_vendor = "NVIDIA"
-                compute_backend = "CUDA"
-            elif "AMD" in gpu_model:
-                gpu_vendor = "AMD"
-                compute_backend = "HIP"
-            elif "Intel" in gpu_model:
-                gpu_vendor = "Intel"
-                compute_backend = "OpenCL"
-            elif "Apple Silicon" in gpu_model:
-                gpu_vendor = "Apple Silicon"
-                compute_backend = "Metal"
-            else:
-                gpu_vendor = "Unknown"
-                compute_backend = "CPU"
-    except:
-        gpu_memory = 0.0
-        pass
-    
+    gpu_memory = 0
+
+    gpus = GPUtil.getGPUs()
+    if gpus:
+        gpu = gpus[0]  # Get first GPU
+        gpu_model = gpu.name
+        gpu_memory = round(gpu.memoryTotal, 2)  # GPU memory in GB
+        if "NVIDIA" in gpu_model:
+            gpu_vendor = "NVIDIA"
+            compute_backend = "CUDA"
+        elif "AMD" in gpu_model:
+            gpu_vendor = "AMD"
+            compute_backend = "HIP"
+        elif "Intel" in gpu_model:
+            gpu_vendor = "Intel"
+            compute_backend = "OpenCL"
+        elif "Apple Silicon" in gpu_model:
+            gpu_vendor = "Apple Silicon"
+            compute_backend = "Metal"
+        else:
+            gpu_vendor = "Unknown"
+            compute_backend = "CPU"
+
     return cpu_model, cpu_cores, memory_gb, gpu_vendor, gpu_model, gpu_memory, compute_backend, os
 
 def display_hardware_info(typer):
