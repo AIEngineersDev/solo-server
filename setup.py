@@ -18,7 +18,8 @@ setup(
         "typer",
         "GPUtil",
         "psutil",
-        "requests",  
+        "requests", 
+        "tabulate", 
     ],
     extras_require={
         "dev": ["pytest", "black", "isort"],

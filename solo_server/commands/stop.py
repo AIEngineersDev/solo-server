@@ -10,7 +10,7 @@ def stop(name: str = ""):
     try:
         # Stop the Docker container
         subprocess.run(
-            ["docker", "stop", "ollama"],
+            ["docker", "stop", "solo"],
             check=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,

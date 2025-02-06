@@ -9,12 +9,12 @@ def run(model: str):
 
     # Check if Docker container is running
     try:
-        check_cmd = ["docker", "ps", "-q", "-f", "name=ollama"]
+        check_cmd = ["docker", "ps", "-q", "-f", "name=solo"]
         if not subprocess.run(check_cmd, capture_output=True, text=True).stdout:
-            typer.echo("❌ Solo server is not active. Please run 'solo setup' first.", err=True)
+            typer.echo("❌ Solo server is not active. Please start solo server first.", err=True)
             return
 
-        command = ["docker", "exec", "-it", "ollama", "ollama", "run", model]
+        command = ["docker", "exec", "-it", "solo", "ollama", "run", model]
         
         # Use subprocess.run with shell=True for interactive terminal
         process = subprocess.run(
