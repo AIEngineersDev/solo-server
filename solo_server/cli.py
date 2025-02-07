@@ -1,15 +1,13 @@
 import typer
-from .commands import pull, serve, stop, status, benchmark
-from .setup import interactive_setup    
+from .commands import run, stop, status
+from .start import start    
 app = typer.Typer()
 
 # Commands
-app.command()(pull.pull)
-app.command()(serve.serve)
+app.command()(run.run)
 app.command()(stop.stop)
 app.command()(status.status)
-app.command()(benchmark.benchmark)
-app.command()(interactive_setup)
+app.command()(start)
 
 if __name__ == "__main__":
     app()

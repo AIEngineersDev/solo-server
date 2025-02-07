@@ -11,11 +11,15 @@ setup(
     description="AIOps for the Physical World.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/AIEngineersDev/solo-server",
+    url="https://github.com/GetSoloTech/solo-server",
     packages=find_packages(include=["solo_server", "solo_server.*"]),
     include_package_data=True,
     install_requires=[
         "typer",
+        "GPUtil",
+        "psutil",
+        "requests", 
+        "tabulate", 
     ],
     extras_require={
         "dev": ["pytest", "black", "isort"],
@@ -23,7 +27,7 @@ setup(
     python_requires=">=3.8",
     entry_points={
         "console_scripts": [
-            "solo-server=solo_server.cli:app",
+            "solo=solo_server.cli:app",
         ],
     },
 )
