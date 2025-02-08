@@ -25,28 +25,13 @@ Solo Server is a lightweight platform that enables users to manage and monitor A
 - **Cross-Platform Compatibility:** Deploy AI models effortlessly on your hardware
 - **Configurable Framework:** Auto-detect hardware (CPU, GPU, RAM) and sets configs
 
-## Supported Models
-Solo Server supports **multiple model sources**, including **Ollama & Hugging Face**.
-
-| **Model Name**         | **Source**                                                |
-|------------------------|----------------------------------------------------------|
-| **DeepSeek R1**        | `ollama://deepseek-r1`                                   |
-| **IBM Granite 3.1**    | `ollama://granite3.1-dense`                              |
-| **Granite Code 8B**    | `hf://ibm-granite/granite-8b-code-base-4k-GGUF`          |
-| **Granite Code 20B**   | `hf://ibm-granite/granite-20b-code-base-8k-GGUF`         |
-| **Granite Code 34B**   | `hf://ibm-granite/granite-34b-code-base-8k-GGUF`         |
-| **Mistral 7B**         | `hf://TheBloke/Mistral-7B-Instruct-v0.2-GGUF`            |
-| **Mistral 7B v3**      | `hf://MaziyarPanahi/Mistral-7B-Instruct-v0.3-GGUF`       |
-| **Hermes 2 Pro**       | `hf://NousResearch/Hermes-2-Pro-Mistral-7B-GGUF`        |
-| **Cerebrum 1.0 7B**    | `hf://froggeric/Cerebrum-1.0-7b-GGUF`                    |
-| **Dragon Mistral 7B**  | `hf://llmware/dragon-mistral-7b-v0`                      |
 
 ## Table of Contents
 
 - [Features](#-features)
-- [Supported Models](#supported-models)
 - [Installation](#installation)
 - [Commands](#commands)
+- [Supported Models](#supported-models)
 - [Configuration](#configuration)
 - [Project Inspiration](#project-inspiration)
 
@@ -56,19 +41,61 @@ Solo Server supports **multiple model sources**, including **Ollama & Hugging Fa
 
 - **🐋 Docker:** Required for containerization 
   - [Install Docker](https://docs.docker.com/get-docker/)
-  - Ensure Docker daemon is running
-
 ### **🔹 Install via PyPI**
 ```sh
+# Make sure you have Python <= 3.12
+python --version  # Should be below 3.13
+
+# Create a new virtual environment
+python -m venv .venv
+
+# Activate the virtual environment
+source .venv/bin/activate  # On Unix/MacOS
+# OR
+.venv\Scripts\activate # On Windows
+```
+```
 pip install solo-server
 ```
-
 ### **🔹 Install with `uv` (Recommended)**
 ```sh
-curl -sSL https://getsolo.tech/install.sh | bash
-```
-Creates an isolated environment using `uv` for performance and stability.  
+# Install uv
+# On Windows (PowerShell)
+iwr https://astral.sh/uv/install.ps1 -useb | iex
 
+# On Unix/MacOS
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Create virtual environment
+uv venv
+
+# Activate the virtual environment
+source .venv/bin/activate  # On Unix/MacOS
+# OR
+.venv\Scripts\activate     # On Windows
+```
+```
+uv pip install solo-server
+```
+Creates an isolated environment using `uv` for performance and stability.
+
+### **🔹 Install in Dev Mode**
+```sh
+# Clone the repository
+git clone https://github.com/GetSoloTech/solo-server.git
+
+# Navigate to the directory
+cd solo-server
+
+# Create and activate virtual environment
+python -m venv .venv
+source .venv/bin/activate  # Unix/MacOS
+# OR
+.venv\Scripts\activate     # Windows
+
+# Install in editable mode
+pip install -e .
+```
 Run the **interactive setup** to configure Solo Server:
 ```sh
 solo start
@@ -213,6 +240,23 @@ solo stop
 ```
 
 ---
+
+## Supported Models
+Solo Server supports **multiple model sources**, including **Ollama & Hugging Face**.
+
+| **Model Name**         | **Source**                                                |
+|------------------------|----------------------------------------------------------|
+| **DeepSeek R1**        | `ollama://deepseek-r1`                                   |
+| **IBM Granite 3.1**    | `ollama://granite3.1-dense`                              |
+| **Granite Code 8B**    | `hf://ibm-granite/granite-8b-code-base-4k-GGUF`          |
+| **Granite Code 20B**   | `hf://ibm-granite/granite-20b-code-base-8k-GGUF`         |
+| **Granite Code 34B**   | `hf://ibm-granite/granite-34b-code-base-8k-GGUF`         |
+| **Mistral 7B**         | `hf://TheBloke/Mistral-7B-Instruct-v0.2-GGUF`            |
+| **Mistral 7B v3**      | `hf://MaziyarPanahi/Mistral-7B-Instruct-v0.3-GGUF`       |
+| **Hermes 2 Pro**       | `hf://NousResearch/Hermes-2-Pro-Mistral-7B-GGUF`        |
+| **Cerebrum 1.0 7B**    | `hf://froggeric/Cerebrum-1.0-7b-GGUF`                    |
+| **Dragon Mistral 7B**  | `hf://llmware/dragon-mistral-7b-v0`                      |
+
 
 ## **⚙️ Configuration (`solo.conf`)**
 After setup, all settings are stored in:
