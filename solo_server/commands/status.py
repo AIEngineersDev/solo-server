@@ -4,12 +4,16 @@ from solo_server.utils.hardware import display_hardware_info
 from tabulate import tabulate
 import json
 
-app = typer.Typer()
-
-@app.command()
 def status():
     """Check running models and system status."""
     display_hardware_info(typer)
+    
+    # First check if docker is running
+    try:
+        subprocess.run(["docker", "ps"], capture_output=True, check=True)
+    except subprocess.CalledProcessError:
+        typer.echo("\n❌ Solo server not running. Please start solo-server first.")
+        return
     
     # Check for running solo container
     container_result = subprocess.run(["docker", "ps", "-f", "name=solo", "--format", "{{json .}}"],

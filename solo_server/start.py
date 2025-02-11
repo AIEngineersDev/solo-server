@@ -155,7 +155,7 @@ def start():
                 docker_run_cmd.append("ollama/ollama")
 
             typer.echo("🚀 Starting Solo Server...")
-            subprocess.run(docker_run_cmd, check=True)
+            subprocess.run(docker_run_cmd, check=True, capture_output=True)
 
         # Wait for container to be ready with timeout
         timeout = 30
